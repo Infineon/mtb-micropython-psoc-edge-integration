@@ -1,0 +1,1099 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.2" xml:lang="en-US">
+  <compounddef id="partition__edge_8h" kind="file" language="C++">
+    <compoundname>partition_edge.h</compoundname>
+    <includedby refid="partition__ARMCM33_8h" local="yes">partition_ARMCM33.h</includedby>
+    <includedby refid="system__edge_8h" local="yes">system_edge.h</includedby>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="partition__edge_8h_1a7ba85104435c8a37adb5fac6f831c5f5" prot="public" static="no">
+        <name>SERAM_START_ADDR</name>
+        <initializer>0x30000000 /* sec addr */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="30" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a856ecb4c39f7bd88848ad46df3f24c59" prot="public" static="no">
+        <name>SERAM_SIZE</name>
+        <initializer>0x00010000 /* 64K */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="31" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ae68dca22475118454d223b7df868e88d" prot="public" static="no">
+        <name>SERAM_CODE_START</name>
+        <initializer>SERAM_START_ADDR</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="32" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a92f9a907b34ebe9b9353a23a49b2c808" prot="public" static="no">
+        <name>SERAM_CODE_SIZE</name>
+        <initializer>0x00008400</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="33" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aebe6cdf61e14b8feaf2d72d30fbbd689" prot="public" static="no">
+        <name>SERAM_DATA_START</name>
+        <initializer>(SERAM_CODE_START + SERAM_CODE_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="34" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a22d90ff8722fb7c97e52cc73f31200c9" prot="public" static="no">
+        <name>SERAM_DATA_SIZE</name>
+        <initializer>(SERAM_SIZE - SERAM_CODE_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="35" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a6bbd4f19b7d117dd37d7f638ae04e630" prot="public" static="no">
+        <name>ITCM_NS_START</name>
+        <initializer>0x00000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="37" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a08400a41b1f1605fc3b64ae438a5aa43" prot="public" static="no">
+        <name>TCM_S_START</name>
+        <initializer>0x10000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="38" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ab79b8094d55a73bf2c7f75acc018f114" prot="public" static="no">
+        <name>ITCM_SIZE</name>
+        <initializer>0x00040000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="39" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a63ec250bfc004011f9363867d1e096bc" prot="public" static="no">
+        <name>DTCM_NS_START</name>
+        <initializer>0x20000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="41" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a834f1f8b755f93939314fc4fe89726ae" prot="public" static="no">
+        <name>DTCM_S_START</name>
+        <initializer>0x30000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="42" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa3221e892c3f05fe2e2087d2d1a407db" prot="public" static="no">
+        <name>DTCM_SIZE</name>
+        <initializer>0x00040000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="43" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a56f6e5b1968ac6b944009dc5a5fa256e" prot="public" static="no">
+        <name>RRAM_NS_START</name>
+        <initializer>0x22000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="45" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a6dd1dd072f41999f868df485d4299425" prot="public" static="no">
+        <name>RRAM_S_START</name>
+        <initializer>0x32000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="46" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a4bdaf1bb1581c8d0314ecc9d3c5167f6" prot="public" static="no">
+        <name>RRAM_SIZE</name>
+        <initializer>0x02000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="47" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa38ace5b3bdaace7b3d72537dac5facc" prot="public" static="no">
+        <name>RRAM_NS_SAHB_START</name>
+        <initializer>RRAM_NS_START</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="49" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1add2999c247554a6f801aa1300e2b151a" prot="public" static="no">
+        <name>RRAM_S_SAHB_START</name>
+        <initializer>RRAM_S_START</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="50" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ae5708a5106cbf3a68b5a1cc6d2a89196" prot="public" static="no">
+        <name>RRAM_NS_CBUS_START</name>
+        <initializer>0x02000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="52" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a798aa5d07a0d487841fb438e552ea45c" prot="public" static="no">
+        <name>RRAM_S_CBUS_START</name>
+        <initializer>0x12000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="53" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa4a0866f95fab5403724626bc0bc27dd" prot="public" static="no">
+        <name>SRAM0_NS_SAHB_START</name>
+        <initializer>0x24000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="55" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a7f577c7192be2edd97005dd267d5aa03" prot="public" static="no">
+        <name>SRAM0_S_SAHB_START</name>
+        <initializer>0x34000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="56" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a6b8d4a9cd945367f8e4c9cba28f61847" prot="public" static="no">
+        <name>SRAM0_NS_CBUS_START</name>
+        <initializer>0x04000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="57" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a784c0fa9f90367ccb7883400012ef172" prot="public" static="no">
+        <name>SRAM0_S_CBUS_START</name>
+        <initializer>0x14000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="58" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ade6f29a1d3e5bd550ae6527640d8ab0d" prot="public" static="no">
+        <name>SRAM0_SIZE</name>
+        <initializer>0x00080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="59" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aafa4e90d41b5ce41ef005f741d205813" prot="public" static="no">
+        <name>SRAM0_SHARED_SIZE</name>
+        <initializer>0x00002000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="60" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a2e55340b563c93a8ed9a8060643e5588" prot="public" static="no">
+        <name>SRAM0_NS_SAHB_SHARED_START</name>
+        <initializer>(SRAM0_NS_SAHB_START + SRAM0_SIZE - SRAM0_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="61" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a62e42576840139e87f00ba1aedec299c" prot="public" static="no">
+        <name>SRAM0_S_SAHB_SHARED_START</name>
+        <initializer>(SRAM0_S_SAHB_START + SRAM0_SIZE - SRAM0_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="62" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aca8138ebae0b96dd77f07e9bb3b9415e" prot="public" static="no">
+        <name>SRAM0_NS_CBUS_SHARED_START</name>
+        <initializer>(SRAM0_NS_CBUS_START + SRAM0_SIZE - SRAM0_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="63" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1abcb491c2d5edaa3e9642e4723cfe73d2" prot="public" static="no">
+        <name>SRAM0_S_CBUS_SHARED_START</name>
+        <initializer>(SRAM0_S_CBUS_START + SRAM0_SIZE - SRAM0_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="64" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a2487a4a02346b2361472ed301a0c404a" prot="public" static="no">
+        <name>SRAM1_NS_SAHB_START</name>
+        <initializer>0x24080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="66" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a80a9bf84bd681af3f4e6bfb3ce170d86" prot="public" static="no">
+        <name>SRAM1_S_SAHB_START</name>
+        <initializer>0x34080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="67" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a09275c1ccbd5556036c6e11faa227eaf" prot="public" static="no">
+        <name>SRAM1_NS_CBUS_START</name>
+        <initializer>0x04080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="68" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a61ef3344ff9838163d5fb72798d85618" prot="public" static="no">
+        <name>SRAM1_S_CBUS_START</name>
+        <initializer>0x14080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="69" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1acf1c7f7eb345f8e1b617fd1b16320111" prot="public" static="no">
+        <name>SRAM1_SIZE</name>
+        <initializer>0x00080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="70" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a8c99c3e43a59881ac26f2d333a71f735" prot="public" static="no">
+        <name>SRAM1_SHARED_SIZE</name>
+        <initializer>0x00002000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="71" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a20d4293b770d349d86b0ef69fef59d0f" prot="public" static="no">
+        <name>SRAM1_NS_SAHB_SHARED_START</name>
+        <initializer>(SRAM1_NS_SAHB_START + SRAM1_SIZE - SRAM1_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="72" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a4a4c67f9c7e775aa1b36578e916f1b15" prot="public" static="no">
+        <name>SRAM1_S_SAHB_SHARED_START</name>
+        <initializer>(SRAM1_S_SAHB_START + SRAM1_SIZE - SRAM1_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="73" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a3d48668cafb8a122f955bb35a1861ff2" prot="public" static="no">
+        <name>SRAM1_NS_CBUS_SHARED_START</name>
+        <initializer>(SRAM1_NS_CBUS_START + SRAM1_SIZE - SRAM1_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="74" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a766aa23d484b30bc5ba7b2f8d8f485dd" prot="public" static="no">
+        <name>SRAM1_S_CBUS_SHARED_START</name>
+        <initializer>(SRAM1_S_CBUS_START + SRAM1_SIZE - SRAM1_SHARED_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="75" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa3f991122edb035b73f0fb24ae2eb465" prot="public" static="no">
+        <name>NS_LOAD_ADDR_SIZE</name>
+        <initializer>0x00000020</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="77" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ad961b71e097f4b64adc0412f19a5a6d1" prot="public" static="no">
+        <name>SRAM0_NS_LOAD_ADDR</name>
+        <initializer>(SRAM0_S_SAHB_START + SRAM0_SIZE - SRAM0_SHARED_SIZE - NS_LOAD_ADDR_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="78" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1acfd88b534ec37646b38b1778a516de76" prot="public" static="no">
+        <name>SOCMEMSRAM_CM55NS_IMAGE_OFFSET</name>
+        <initializer>0x00000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="80" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a2780b45c5838ddc208d0d63d8c47bdaf" prot="public" static="no">
+        <name>APP_SOCMEMSRAM_CM55NS_APP_SIZE</name>
+        <initializer>0x00080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="82" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa3b7bc18a27d3c960c6f6ca93ff0eda0" prot="public" static="no">
+        <name>APP_SOCMEMSRAM_GPUBUF_SIZE</name>
+        <initializer>0x00080000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="85" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ac233d7eec0abe1434e8ae0392ffaf5a3" prot="public" static="no">
+        <name>APP_SOCMEMSRAM_SHARED_SIZE</name>
+        <initializer>0x00100000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="88" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a48bc0ab6700a3c5d74972799be90b270" prot="public" static="no">
+        <name>SOCMEM_NS_RAM_SAHB_START</name>
+        <initializer>0x26000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="91" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a5f7ffd8c81b5219e079098b931e0e8f1" prot="public" static="no">
+        <name>SOCMEM_S_RAM_SAHB_START</name>
+        <initializer>0x36000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="92" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ac17f6f0bb4c82b9c5ff9ccda9fa22bbb" prot="public" static="no">
+        <name>SOCMEM_NS_RAM_CBUS_START</name>
+        <initializer>0x06000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="93" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a9d3c1a74869e640533b4f5b222ad4da3" prot="public" static="no">
+        <name>SOCMEM_S_RAM_CBUS_START</name>
+        <initializer>0x16000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="94" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a07b7ba45069d594eaef7ce8c884abed7" prot="public" static="no">
+        <name>SOCMEM_RAM_SIZE</name>
+        <initializer>0x00500000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="95" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ae40abc023a846ec42e1ce4e40ae24796" prot="public" static="no">
+        <name>SOCMEM_SHARED_MEM_SIZE</name>
+        <initializer>APP_SOCMEMSRAM_SHARED_SIZE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="96" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1abc021f8486005515012ceebd8d447c02" prot="public" static="no">
+        <name>SOCMEM_SHARED_OFFSET</name>
+        <initializer>SOCMEMSRAM_CM55NS_IMAGE_OFFSET + APP_SOCMEMSRAM_CM55NS_APP_SIZE + APP_SOCMEMSRAM_GPUBUF_SIZE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="97" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa07b61f2a75e0b88b36b46bb715d11e2" prot="public" static="no">
+        <name>SOCMEM_NS_SAHB_SHARED_START</name>
+        <initializer>(SOCMEM_NS_RAM_SAHB_START + SOCMEM_SHARED_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="98" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a6d688b08777b8ce0273cdb6ef926ee5e" prot="public" static="no">
+        <name>SOCMEM_GPUBUF_OFFSET</name>
+        <initializer>SOCMEMSRAM_CM55NS_IMAGE_OFFSET + APP_SOCMEMSRAM_CM55NS_APP_SIZE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="101" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a5dbf1d9ccb3efe2807f34237952db19f" prot="public" static="no">
+        <name>SOCMEM_GPUBUF_SIZE</name>
+        <initializer>APP_SOCMEMSRAM_GPUBUF_SIZE</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="102" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a2a2f1e29b8dd54bb4191d38ca791142d" prot="public" static="no">
+        <name>SOCMEM_GPUBUF_START</name>
+        <initializer>(SOCMEM_NS_RAM_SAHB_START + SOCMEM_GPUBUF_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="103" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a575b202ae801a51755b614f6760bc51a" prot="public" static="no">
+        <name>FLASH_NS_SAHB_START</name>
+        <initializer>0x60000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="105" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a1efbfe429a7aa9cf6e60ea60a1b93f33" prot="public" static="no">
+        <name>FLASH_S_SAHB_START</name>
+        <initializer>0x70000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="106" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a935365e05c138d540231996ff196d046" prot="public" static="no">
+        <name>FLASH_NS_CBUS_START</name>
+        <initializer>0x08000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="107" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a8e8b44c5c517997b4e6106ffaa72b5b3" prot="public" static="no">
+        <name>FLASH_S_CBUS_START</name>
+        <initializer>0x18000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="108" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ae69620948dea1b76e0ab7843ab719db7" prot="public" static="no">
+        <name>FLASH_SIZE</name>
+        <initializer>0x04000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="109" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a34480f40358fc14434e1f2a546298318" prot="public" static="no">
+        <name>MMIO_NS_M33SYS_START</name>
+        <initializer>0x42000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="111" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aacc20387c011d242e4a3e0b5a34e2170" prot="public" static="no">
+        <name>MMIO_S_M33SYS_START</name>
+        <initializer>0x52000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="112" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a4a1a8141ded7406f1d54de5ec5c9c4c0" prot="public" static="no">
+        <name>MMIO_M33SYS_SIZE</name>
+        <initializer>0x02000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="113" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a0a2c816a8890e25386fb9408614ec687" prot="public" static="no">
+        <name>MMIO_NS_M55APP_START</name>
+        <initializer>0x44000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="115" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a4287e5b1167cc456fcfd9a73b084897b" prot="public" static="no">
+        <name>MMIO_S_M55APP_START</name>
+        <initializer>0x54000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="116" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a4f78bdf36e2b998b791e5d69786cab3f" prot="public" static="no">
+        <name>MMIO_M55APP_SIZE</name>
+        <initializer>0x01000000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="117" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a389720d7414abcdba94dd0bea3a8bc9b" prot="public" static="no">
+        <name>SRAM1_NS_SIZE</name>
+        <initializer>(SRAM1_SIZE - SRAM1_SHARED_SIZE)  /** 504K */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="119" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a59ad33b041f5fbb0eccff13b46a4b084" prot="public" static="no">
+        <name>SRAM1_SHM_OFFSET</name>
+        <initializer>(SRAM1_NS_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="120" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ab14db86bb0f4aacdb42b374cacbdcdd3" prot="public" static="no">
+        <name>RRAM_CM33S_APP_OFFSET</name>
+        <initializer>0x0002A400</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="122" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a1830e6b1793f7ccbb8de58f1eb6af3f9" prot="public" static="no">
+        <name>RRAM_SEC_APP_START</name>
+        <initializer>(RRAM_S_START + RRAM_CM33S_APP_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="124" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a6d1811b4bb1dd1e6702f2fa021543e15" prot="public" static="no">
+        <name>RRAM_CM33S_APP_SIZE</name>
+        <initializer>(51*1024) /* 50KB */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="129" column="10" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a9d5285d77776595ed1246c63570e38f1" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_CODE_OFFSET</name>
+        <initializer>(RRAM_CM33S_APP_OFFSET + RRAM_CM33S_APP_SIZE) /* Make sure this address is always multiple of 4KB since RRAM MPC Block can be configured at 4K granularity */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="132" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ad9780858ea8973faf40f27dbaffd0972" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_CODE_SIZE</name>
+        <initializer>(0) /* 0KB */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="137" column="10" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a82a862577be954b2e58b5faf2a74ceec" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_CODE_START</name>
+        <initializer>(RRAM_NS_SAHB_START + RRAM_NVM_MAIN_NS_CODE_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="140" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a751d9cdfff9f405f70cdb049cadbe898" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_M55CODE_OFFSET</name>
+        <initializer>(RRAM_NVM_MAIN_NS_CODE_OFFSET + RRAM_NVM_MAIN_NS_CODE_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="142" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1acf7c5232d5c53608aeab8c2033da301e" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_M55CODE_SIZE</name>
+        <initializer>(0) /* 0KB */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="147" column="10" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a42610638adffc6da36dc4263fee6a914" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_M55CODE_START</name>
+        <initializer>(RRAM_NS_CBUS_START + RRAM_NVM_MAIN_NS_M55CODE_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="150" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a82497b949b8083cd024abad3bc2033ee" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_DATA_OFFSET</name>
+        <initializer>(RRAM_NVM_MAIN_NS_M55CODE_OFFSET + RRAM_NVM_MAIN_NS_M55CODE_SIZE)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="152" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1ace0337dea15c1c70515d235a0f9a4c95" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_DATA_SIZE</name>
+        <initializer>(16*1024) /* 16KB */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="157" column="10" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a30e66fa78996421fca5107c4824aa4a8" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_SIZE</name>
+        <initializer>(40*1024) /* 40KB */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="161" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a8bdb471b177cd86dd9831f046ab4e720" prot="public" static="no">
+        <name>RRAM_NVM_MAIN_NS_OFFSET</name>
+        <initializer>(RRAM_NVM_MAIN_NS_CODE_OFFSET)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="162" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a9581bed76fbdd11e24bf5b6de1a0c4ae" prot="public" static="no">
+        <name>RRAM_NVM_PROTECTED_OFFSET</name>
+        <initializer>(CPUSS_RRAMC_MAIN_N*8*1024) /** 256K offset */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="165" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1a1b92c153d153f5cfe97eda9dec5ba83c" prot="public" static="no">
+        <name>RRAM_NVM_PROTECTED_NS_SIZE</name>
+        <initializer>(CPUSS_RRAMC_PROTECTED_X*4*1024) /** 128K */</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="166" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="partition__edge_8h_1aa9b21f3d33c0e58888f8d65f621c4697" prot="public" static="no">
+        <name>RRAM_NVM_DATA_NS_START</name>
+        <initializer>(RRAM_NS_SAHB_START + 0x00003C000)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" line="167" column="9" bodyfile="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="version"><para>1.0.0</para>
+</simplesect>
+Partition file contains memory addresses</para>
+<para>The main purpose of the partition file is to describe how the sections in the linker files should be mapped into the output file, and to control the memory layout of the output file.</para>
+<para><simplesect kind="copyright"><para>Copyright (c) (2020-2025), Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation. SPDX-License-Identifier: Apache-2.0</para>
+</simplesect>
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at <verbatim>http://www.apache.org/licenses/LICENSE-2.0
+</verbatim> Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/***************************************************************************/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_START_ADDR<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x30000000<sp/></highlight><highlight class="comment">/*<sp/>sec<sp/>addr<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00010000<sp/></highlight><highlight class="comment">/*<sp/>64K<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_CODE_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SERAM_START_ADDR</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_CODE_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00008400</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_DATA_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SERAM_CODE_START<sp/>+<sp/>SERAM_CODE_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SERAM_DATA_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SERAM_SIZE<sp/>-<sp/>SERAM_CODE_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ITCM_NS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TCM_S_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x10000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ITCM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00040000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DTCM_NS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x20000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DTCM_S_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x30000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DTCM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00040000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x22000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_S_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x32000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x02000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NS_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>RRAM_NS_START</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_S_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>RRAM_S_START</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NS_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x02000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_S_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x12000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_NS_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x24000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_S_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x34000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_NS_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x04000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_S_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x14000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_SHARED_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00002000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_NS_SAHB_SHARED_START<sp/><sp/>(SRAM0_NS_SAHB_START<sp/>+<sp/>SRAM0_SIZE<sp/>-<sp/>SRAM0_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_S_SAHB_SHARED_START<sp/><sp/><sp/>(SRAM0_S_SAHB_START<sp/>+<sp/>SRAM0_SIZE<sp/>-<sp/>SRAM0_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_NS_CBUS_SHARED_START<sp/><sp/>(SRAM0_NS_CBUS_START<sp/>+<sp/>SRAM0_SIZE<sp/>-<sp/>SRAM0_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_S_CBUS_SHARED_START<sp/><sp/><sp/>(SRAM0_S_CBUS_START<sp/>+<sp/>SRAM0_SIZE<sp/>-<sp/>SRAM0_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_NS_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x24080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_S_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x34080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_NS_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x04080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_S_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x14080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_SHARED_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00002000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_NS_SAHB_SHARED_START<sp/><sp/>(SRAM1_NS_SAHB_START<sp/>+<sp/>SRAM1_SIZE<sp/>-<sp/>SRAM1_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_S_SAHB_SHARED_START<sp/><sp/><sp/>(SRAM1_S_SAHB_START<sp/>+<sp/>SRAM1_SIZE<sp/>-<sp/>SRAM1_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_NS_CBUS_SHARED_START<sp/><sp/>(SRAM1_NS_CBUS_START<sp/>+<sp/>SRAM1_SIZE<sp/>-<sp/>SRAM1_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_S_CBUS_SHARED_START<sp/><sp/><sp/>(SRAM1_S_CBUS_START<sp/>+<sp/>SRAM1_SIZE<sp/>-<sp/>SRAM1_SHARED_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NS_LOAD_ADDR_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00000020</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM0_NS_LOAD_ADDR<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SRAM0_S_SAHB_START<sp/>+<sp/>SRAM0_SIZE<sp/>-<sp/>SRAM0_SHARED_SIZE<sp/>-<sp/>NS_LOAD_ADDR_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEMSRAM_CM55NS_IMAGE_OFFSET<sp/><sp/><sp/>0x00000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>APP_SOCMEMSRAM_CM55NS_APP_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>APP_SOCMEMSRAM_CM55NS_APP_SIZE<sp/>0x00080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>APP_SOCMEMSRAM_GPUBUF_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>APP_SOCMEMSRAM_GPUBUF_SIZE<sp/>0x00080000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>APP_SOCMEMSRAM_SHARED_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>APP_SOCMEMSRAM_SHARED_SIZE<sp/>0x00100000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_NS_RAM_SAHB_START<sp/><sp/><sp/><sp/>0x26000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_S_RAM_SAHB_START<sp/><sp/><sp/><sp/><sp/>0x36000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_NS_RAM_CBUS_START<sp/><sp/><sp/><sp/>0x06000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_S_RAM_CBUS_START<sp/><sp/><sp/><sp/><sp/>0x16000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_RAM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x00500000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_SHARED_MEM_SIZE<sp/><sp/><sp/><sp/><sp/><sp/>APP_SOCMEMSRAM_SHARED_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_SHARED_OFFSET<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SOCMEMSRAM_CM55NS_IMAGE_OFFSET<sp/>+<sp/>APP_SOCMEMSRAM_CM55NS_APP_SIZE<sp/>+<sp/>APP_SOCMEMSRAM_GPUBUF_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_NS_SAHB_SHARED_START<sp/>(SOCMEM_NS_RAM_SAHB_START<sp/>+<sp/>SOCMEM_SHARED_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_GPUBUF_OFFSET<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SOCMEMSRAM_CM55NS_IMAGE_OFFSET<sp/>+<sp/>APP_SOCMEMSRAM_CM55NS_APP_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_GPUBUF_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>APP_SOCMEMSRAM_GPUBUF_SIZE</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SOCMEM_GPUBUF_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SOCMEM_NS_RAM_SAHB_START<sp/>+<sp/>SOCMEM_GPUBUF_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FLASH_NS_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x60000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FLASH_S_SAHB_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x70000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FLASH_NS_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x08000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FLASH_S_CBUS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x18000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FLASH_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x04000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_NS_M33SYS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x42000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_S_M33SYS_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x52000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_M33SYS_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x02000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_NS_M55APP_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x44000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_S_M55APP_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x54000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MMIO_M55APP_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x01000000</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_NS_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SRAM1_SIZE<sp/>-<sp/>SRAM1_SHARED_SIZE)<sp/><sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRAM1_SHM_OFFSET<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(SRAM1_NS_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_CM33S_APP_OFFSET<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0x0002A400</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_SEC_APP_START<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(RRAM_S_START<sp/>+<sp/>RRAM_CM33S_APP_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined<sp/>(RRAM_BOOT)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_CM33S_APP_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(31*1024)<sp/></highlight><highlight class="comment">/*<sp/>23KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_CM33S_APP_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(51*1024)<sp/></highlight><highlight class="comment">/*<sp/>50KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_CODE_OFFSET<sp/><sp/>(RRAM_CM33S_APP_OFFSET<sp/>+<sp/>RRAM_CM33S_APP_SIZE)<sp/></highlight><highlight class="comment">/*<sp/>Make<sp/>sure<sp/>this<sp/>address<sp/>is<sp/>always<sp/>multiple<sp/>of<sp/>4KB<sp/>since<sp/>RRAM<sp/>MPC<sp/>Block<sp/>can<sp/>be<sp/>configured<sp/>at<sp/>4K<sp/>granularity<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined<sp/>(RRAM_BOOT)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_CODE_SIZE<sp/><sp/><sp/><sp/>(40*1024)<sp/></highlight><highlight class="comment">/*<sp/>40KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_CODE_SIZE<sp/><sp/><sp/><sp/>(0)<sp/></highlight><highlight class="comment">/*<sp/>0KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_CODE_START<sp/><sp/><sp/>(RRAM_NS_SAHB_START<sp/>+<sp/>RRAM_NVM_MAIN_NS_CODE_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_M55CODE_OFFSET<sp/><sp/>(RRAM_NVM_MAIN_NS_CODE_OFFSET<sp/>+<sp/>RRAM_NVM_MAIN_NS_CODE_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined<sp/>(RRAM_BOOT)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_M55CODE_SIZE<sp/>(40*1024)<sp/></highlight><highlight class="comment">/*<sp/>40KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_M55CODE_SIZE<sp/>(0)<sp/></highlight><highlight class="comment">/*<sp/>0KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_M55CODE_START<sp/><sp/><sp/>(RRAM_NS_CBUS_START<sp/>+<sp/>RRAM_NVM_MAIN_NS_M55CODE_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_DATA_OFFSET<sp/><sp/>(RRAM_NVM_MAIN_NS_M55CODE_OFFSET<sp/>+<sp/>RRAM_NVM_MAIN_NS_M55CODE_SIZE)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined<sp/>(RRAM_BOOT)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_DATA_SIZE<sp/><sp/><sp/><sp/>(8*1024)<sp/></highlight><highlight class="comment">/*<sp/>8KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_DATA_SIZE<sp/><sp/><sp/><sp/>(16*1024)<sp/></highlight><highlight class="comment">/*<sp/>16KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight><highlight class="comment">//#define<sp/>RRAM_NVM_MAIN_NS_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/>(RRAM_NVM_MAIN_NS_CODE_SIZE<sp/>+<sp/>RRAM_NVM_MAIN_NS_M55CODE_SIZE<sp/>+<sp/>RRAM_NVM_MAIN_NS_DATA_SIZE)<sp/>/**<sp/>60KB+20KB<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_SIZE<sp/><sp/><sp/><sp/><sp/><sp/><sp/>(40*1024)<sp/></highlight><highlight class="comment">/*<sp/>40KB<sp/>*/</highlight><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_MAIN_NS_OFFSET<sp/><sp/><sp/><sp/><sp/>(RRAM_NVM_MAIN_NS_CODE_OFFSET)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_PROTECTED_OFFSET<sp/><sp/><sp/>(CPUSS_RRAMC_MAIN_N*8*1024)<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_PROTECTED_NS_SIZE<sp/><sp/>(CPUSS_RRAMC_PROTECTED_X*4*1024)<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RRAM_NVM_DATA_NS_START<sp/><sp/><sp/><sp/><sp/><sp/>(RRAM_NS_SAHB_START<sp/>+<sp/>0x00003C000)</highlight></codeline>
+    </programlisting>
+    <location file="output/bsps/TARGET_KIT_PSE84_EVAL_EPC4/partition_edge.h"/>
+  </compounddef>
+</doxygen>
