@@ -153,3 +153,7 @@ ehthumbs_vista.db
 
 # Imported assets
 /bsps
+assetlocks.json
+
+# TODO: Check why this this file is not in build
+nsc_veneer.o
