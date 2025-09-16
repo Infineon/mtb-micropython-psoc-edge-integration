@@ -39,7 +39,7 @@ sudo apt install ./ModusToolboxProgtools_1.5.0.1534.deb
 5. Finally, overwrite the manifest to the internal Infineon Gitlab, by setting the following environment variable:
 
 ```
-export 'CyRemoteManifestOverride'=https://gitlab.intra.infineon.com/rsg /mtb-super-manifest/-/raw/psoc_edge_e84_es100/mtb-super-manifest-fv2.xml
+export 'CyRemoteManifestOverride'=https://gitlab.intra.infineon.com/rsg/mtb-super-manifest/-/raw/psoc_edge_e84_es100/mtb-super-manifest-fv2.xml
 ```
 
 You can now from the `lib/mtb-psoc-edge-libs` directory run:
