@@ -59,4 +59,28 @@ mtb_build:
 	$(info Building $(BOARD) in $(CONFIG) mode using MTB ...)
 	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) build 
 
+mtb_program:
+	$(info )
+	$(info Deploying firmware in board $(BOARD)...)
+	$(info yes ${DEVICE_SN} is empty)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) program MTB_PROBE_SERIAL=$(DEVICE_SN)
+
+mtb_help:
+	@:
+	$(info )
+	$(info ModusToolbox available targets:)
+	$(info )
+	$(info 	mtb_init            Initialize ModusToolbox libraries for the selected board.)
+	$(info  ..                  It depends on mtb_deinit, mtb_add_bsp, mtb_set_bsp and mtb_get_libs)
+	$(info  mtb_add_bsp         Add the selected board BSP to the project)
+	$(info  mtb_set_bsp         Set the selected board as active)
+	$(info  mtb_get_libs        Download ModusToolbox libraries and dependencies)
+	$(info	mtb_deinit          Remove ModusToolbox libraries and dependencies)
+	$(info 	mtb_build           Build the project using ModusToolbox build system)
+	$(info 	mtb_program         Program the built firmware to the connected board.)
+	$(info 	..                  Use DEVICE_SN to specify the board serial number)
+	$(info 	mtb_clean           Clean the ModusToolbox build files)
+	$(info 	mtb_help            Show this help message)
+	$(info )
+
 .PHONY: mtb_init mtb_deinit mtb_build
