@@ -31,7 +31,7 @@ mtb_deinit: mtb_clean
 	-$(Q) cd $(MTB_LIBS_DIR); find . -type f -name .ninja_log -exec rm -f {} +
 	-$(Q) cd $(MTB_LIBS_DIR); find . -type d -name libs -exec rm -rf {} +
 #TODO: Check if this file is always created
-	-$(Q) cd $(MTB_LIBS_DIR); rm proj_cm33_s/nsc_veneer.o 
+	-$(Q) cd $(MTB_LIBS_DIR); rm -f proj_cm33_s/nsc_veneer.o 
 # TODO: In future we might also need to remove the deps/*.mtb files as in PSOC6
 # projects. I keep it here as a reminder.
 # 	-$(Q) cd $(MTB_LIBS_DIR); find deps/*.mtb -maxdepth 1 -type f -delete 
