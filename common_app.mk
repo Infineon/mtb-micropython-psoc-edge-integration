@@ -33,7 +33,7 @@
 #  $(CY_WIN_HOME)/ModusToolbox/tools_* \
 
 CY_TOOLS_PATHS ?= $(wildcard \
-    $(HOME)/ModusToolbox/tools_* \
+    /opt/Tools/ModusToolbox/tools_* \
     /Applications/ModusToolbox/tools_*)
 
 # If you install ModusToolbox software in a custom location, add the path to its
