@@ -36,8 +36,11 @@
 #
 MTB_TYPE=APPLICATION
 
-MTB_PROJECTS=proj_cm33_s proj_cm33_ns proj_cm55
+MTB_PROJECTS=proj_cm33_ns proj_cm33_s
 
+CONFIG=Debug
+
+VERBOSE=
 ################################################################################
 # Paths
 ################################################################################
