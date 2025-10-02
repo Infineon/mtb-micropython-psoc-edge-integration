@@ -155,5 +155,7 @@ ehthumbs_vista.db
 /bsps
 assetlocks.json
 
+.mtb_active_bsp
+
 # TODO: Check why this this file is not in build
 nsc_veneer.o
