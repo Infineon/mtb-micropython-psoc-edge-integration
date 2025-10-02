@@ -33,11 +33,13 @@ include ../common.mk
 #
 # If APPNAME is edited, ensure to update or regenerate launch
 # configurations for your IDE.
-APPNAME=proj_cm33_ns
+LIBNAME=proj_cm33_ns
 
+CONFIG=Debug
 # If set to "true" or "1", display full command-lines when building.
 VERBOSE=
 
+#NSC_VENEER=
 
 ################################################################################
 # Advanced Configuration
@@ -67,9 +69,12 @@ CORE_NAME=CM33_0
 # by default, or otherwise not found by the build system.
 SOURCES+=
 
+MPY_TOP_DIR = ../..
+MPY_PSOC_EDGE_PORT_DIR = $(MPY_TOP_DIR)/ports/psoc-edge
+
 # Like SOURCES, but for include directories. Value should be paths to
 # directories (without a leading -I).
-INCLUDES+=
+INCLUDES+=$(MPY_TOP_DIR) $(MPY_PSOC_EDGE_PORT_DIR) $(MPY_PSOC_EDGE_PORT_DIR)/boards/$(BOARD)
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF
