@@ -1,86 +1,69 @@
+MTB_LIBS_DIR ?= ../../lib/mtb-psoc-edge-libs
+MTB_MAKEFILE := $(MTB_LIBS_DIR)/Makefile
 
-MTB_LIBS_DIR = $(TOP)/lib/mtb-psoc-edge-libs
+ifeq ($(CONFIG),)
+CONFIG = $(shell egrep '^ *CONFIG' $(MTB_MAKEFILE) | sed 's/^.*= *//g')
+$(info Using CONFIG from environment: $(CONFIG))
+else
+endif
 
-mtb_init: mtb_deinit mtb_add_bsp mtb_set_bsp mtb_get_libs
-	$(info )
-	$(info Initializing ModusToolbox libs for board $(BOARD))
+MTB_LIBS_BUILD_DIR := $(MTB_LIBS_DIR)/build
+MTB_LIBS_BUILD_PRJ_HEX_DIR := $(MTB_LIBS_BUILD_DIR)/project_hex
 
-mtb_get_libs:
-	$(info )
-	$(info Retrieving ModusToolbox dependencies ...)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) getlibs
+MTB_CM33_NS_BUILD_DIR       := $(MTB_LIBS_DIR)/proj_cm33_ns/build
+MTB_CM33_NS_BOARD_BUILD_DIR  := $(MTB_CM33_NS_BUILD_DIR)/APP_$(BOARD)/$(CONFIG)
 
-mtb_add_bsp:
-	$(info )
-	$(info Adding board $(BOARD) dependencies ...)
-	$(Q) cd $(MTB_LIBS_DIR); library-manager-cli --project . --add-bsp-name $(BOARD) --add-bsp-version $(BOARD_VERSION)
+MTB_NS_STATIC_LIB = $(MTB_CM33_NS_BOARD_BUILD_DIR)/proj_cm33_ns.a
 
-mtb_set_bsp: 
-	$(info )
-	$(info Setting board $(BOARD) as active ...)
-	$(Q) cd $(MTB_LIBS_DIR); library-manager-cli --project . --set-active-bsp APP_$(BOARD)
+MPY_MTB_MAKE_VARS = BOARD=$(BOARD) CONFIG=$(CONFIG)
 
-# Remove MTB retrieved lib and dependencies
-mtb_deinit: mtb_clean
-	$(info )
-	$(info Removing mtb_shared and libs folder ...)
-	-$(Q) cd $(MTB_LIBS_DIR); rm -rf bsps
-	-$(Q) cd $(MTB_LIBS_DIR); rm -rf ../mtb_shared
-	-$(Q) cd $(MTB_LIBS_DIR); find . -type f -name assetlocks.json -exec rm -f {} +
-	-$(Q) cd $(MTB_LIBS_DIR); find . -type f -name .mtbqueryapi -exec rm -f {} +
-	-$(Q) cd $(MTB_LIBS_DIR); find . -type f -name .ninja_log -exec rm -f {} +
-	-$(Q) cd $(MTB_LIBS_DIR); find . -type d -name libs -exec rm -rf {} +
-#TODO: Check if this file is always created
-	-$(Q) cd $(MTB_LIBS_DIR); rm -f proj_cm33_s/nsc_veneer.o 
-# TODO: In future we might also need to remove the deps/*.mtb files as in PSOC6
-# projects. I keep it here as a reminder.
-# 	-$(Q) cd $(MTB_LIBS_DIR); find deps/*.mtb -maxdepth 1 -type f -delete 
-
-mtb_clean:
-	$(info )
-	$(info Cleaning MTN build projects)
-	-$(Q) $(MAKE) -C $(MTB_LIBS_DIR) clean
-	-$(Q) cd $(MTB_LIBS_DIR); rm -rf build
-
-# TODO: We don´t want to MTB init every time we build, only once. 
-# For now, we will let the user explicitly call mtb_init.
-# We will check later how to implement this effectively keeping the 
-# required micropython flow:
-#
-# make submodules
-# make BOARD=KIT_PSE84_AI
-# make BOARD=KIT_PSE84_AI deploy
-#
-# Ideally, also we don´t need to specify the boards for every make command
-# after the first one.
-
-mtb_build:
+mtb_build_ns: $(MTB_NS_STATIC_LIB) 
+$(MTB_NS_STATIC_LIB):
 	$(info )
 	$(info Building $(BOARD) in $(CONFIG) mode using MTB ...)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) build 
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS=proj_cm33_ns build NINJA=
+
+mtb_build_s:
+	$(info )
+	$(info Building $(BOARD) in $(CONFIG) mode using MTB ...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS=proj_cm33_s build
 
 mtb_program:
 	$(info )
 	$(info Deploying firmware in board $(BOARD)...)
-	$(info yes ${DEVICE_SN} is empty)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) program MTB_PROBE_SERIAL=$(DEVICE_SN)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram MTB_PROBE_SERIAL=$(DEVICE_SN) MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA=
 
-mtb_help:
+# TODO: Complete the proper retrieval of building flags.
+mtb_get_build_flags_ns: $(MTB_NS_STATIC_LIB)
+	@:
+	$(info)
+	$(eval MPY_MTB_INCLUDE_DIRS = $(file < $(MTB_LIBS_DIR)/proj_cm33_ns/inclist.rsp))
+	$(eval INC += $(subst -I,-I$(MTB_LIBS_DIR)/,$(MPY_MTB_INCLUDE_DIRS)))
+# 	$(eval MPY_MTB_LIBRARIES = $(file < $(MTB_CM33_NS_BOARD_BUILD_DIR )/liblist.rsp))
+	$(eval LIBS += $(MTB_NS_STATIC_LIB))
+	$(eval CFLAGS += $(file < $(MTB_LIBS_DIR)/proj_cm33_ns/.cflags))
+# 	$(eval CXXFLAGS += $(file < $(MTB_LIBS_DIR)/proj_cm33_ns/.cxxflags))
+# 	$(eval LDFLAGS += $(file < $(MTB_LIBS_DIR)/proj_cm33_ns/.ldflags))
+# 	$(eval QSTR_GEN_CFLAGS += $(INC) $(CFLAGS))
+
+mtb_clean:
+	$(info )
+	$(info Cleaning MTB build projects)
+	-$(Q) $(MAKE) -C $(MTB_LIBS_DIR) clean MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS)
+	-$(Q) rm -rf $(MTB_LIBS_DIR)/build
+
+mtb_build_help:
 	@:
 	$(info )
-	$(info ModusToolbox available targets:)
+	$(info ModusToolbox build available targets:)
 	$(info )
-	$(info 	mtb_init            Initialize ModusToolbox libraries for the selected board.)
-	$(info  ..                  It depends on mtb_deinit, mtb_add_bsp, mtb_set_bsp and mtb_get_libs)
-	$(info  mtb_add_bsp         Add the selected board BSP to the project)
-	$(info  mtb_set_bsp         Set the selected board as active)
-	$(info  mtb_get_libs        Download ModusToolbox libraries and dependencies)
-	$(info	mtb_deinit          Remove ModusToolbox libraries and dependencies)
-	$(info 	mtb_build           Build the project using ModusToolbox build system)
-	$(info 	mtb_program         Program the built firmware to the connected board.)
-	$(info 	..                  Use DEVICE_SN to specify the board serial number)
-	$(info 	mtb_clean           Clean the ModusToolbox build files)
-	$(info 	mtb_help            Show this help message)
+	$(info 	mtb_build_s             Build the cm33 secure project)
+	$(info 	mtb_build_ns            Build the cm33 non-secure project)
+	$(info  mtb_get_build_flags_ns  Retrieve build flags for cm33 non-secure build)
+	$(info 	mtb_program             Program the built firmware to the connected board.)
+	$(info 	..                      Use DEVICE_SN to specify the board serial number)
+	$(info 	mtb_clean               Clean the ModusToolbox build files)
+	$(info 	mtb_build_help          Show this help message)
 	$(info )
 
-.PHONY: mtb_init mtb_deinit mtb_build
+.PHONY: mtb_build_ns mtb_build_s mtb_get_build_flags mtb_program mtb_clean mtb_build_help
