@@ -50,7 +50,7 @@
                     "inputs" :
                     [
                         {
-                            "file" : "../build/project_hex/proj_cm33_ns.hex",
+                            "file" : "../build/project_hex/mpy_edge_app_ns.hex",
                             "regions" : "{{RelocationTable}}"
                         }
                     ],
@@ -87,9 +87,6 @@
                         },
                         {
                             "file" : "../build/project_hex/proj_cm33_ns_shifted.hex"
-                        },
-                        {
-                            "file" : "../build/project_hex/proj_cm55.hex"
                         }
                     ],
                     "outputs" :
