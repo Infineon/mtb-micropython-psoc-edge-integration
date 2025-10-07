@@ -33,7 +33,10 @@ include ../common.mk
 #
 # If APPNAME is edited, ensure to update or regenerate launch
 # configurations for your IDE.
-LIBNAME=proj_cm33_ns
+# We are using the app name provided by the top-level MicroPython makefile
+ifeq ($(APPNAME),)
+APPNAME = proj_cm33_ns
+endif
 
 CONFIG=Debug
 # If set to "true" or "1", display full command-lines when building.
@@ -69,12 +72,9 @@ CORE_NAME=CM33_0
 # by default, or otherwise not found by the build system.
 SOURCES+=
 
-MPY_TOP_DIR = ../..
-MPY_PSOC_EDGE_PORT_DIR = $(MPY_TOP_DIR)/ports/psoc-edge
-
 # Like SOURCES, but for include directories. Value should be paths to
 # directories (without a leading -I).
-INCLUDES+=$(MPY_TOP_DIR) $(MPY_PSOC_EDGE_PORT_DIR) $(MPY_PSOC_EDGE_PORT_DIR)/boards/$(BOARD)
+INCLUDES+=
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF
