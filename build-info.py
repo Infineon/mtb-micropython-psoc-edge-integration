@@ -19,7 +19,7 @@ class InfoBuilder:
         if build_dir is None:
             self.build_dir = self.metafiles_dir
         else:
-            self.build_dir = self.metafiles_dir
+            self.build_dir = build_dir
 
         # Each file type has its own build info function
         self.file_type_builder = {
