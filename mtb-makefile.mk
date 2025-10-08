@@ -11,6 +11,7 @@ MPY_MTB_MAKE_VARS = BOARD=$(BOARD) CONFIG=$(CONFIG)
 
 MTB_LIBS_BUILD_DIR         := $(MTB_LIBS_DIR)/build
 MTB_LIBS_BUILD_PRJ_HEX_DIR := $(MTB_LIBS_BUILD_DIR)/project_hex
+MTB_PRJ_NS_DIR 			   := $(MTB_LIBS_DIR)/proj_cm33_ns		
 MTB_PRJ_NS_BUILD_DIR       := $(MTB_LIBS_DIR)/proj_cm33_ns/build/APP_$(BOARD)/$(CONFIG)
 
 ################################################################################
@@ -22,7 +23,6 @@ MTB_PRJ_NS_BUILD_DIR       := $(MTB_LIBS_DIR)/proj_cm33_ns/build/APP_$(BOARD)/$(
 
 MTB_BUILD_METAFILES_NAME = .defines .cflags .cxxflags .ldflags .ldlibs $(MPY_APP_NAME).ninja $(MPY_APP_NAME).elf.rsp
 MTB_BUILD_METAFILES      = $(addprefix $(MTB_PRJ_NS_BUILD_DIR)/, $(MTB_BUILD_METAFILES_NAME))
-MTB_DEFINES_FILE         = $(MTB_PRJ_NS_BUILD_DIR)/.defines
 
 # "COMBINE_SIGN_JSON=" is empty to avoid the hex combine step. 
 # This step will be done by the "mtb_build_s" target.
@@ -33,14 +33,6 @@ $(MTB_BUILD_METAFILES):
 
 mtb_build_ns: $(MTB_BUILD_METAFILES)
 
-MPY_CFLAGS_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_cflags
-MPY_CXXFLAGS_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_cxxflags
-MPY_LDFLAGS_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_ldflags
-MPY_LDLIBS_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_ldlibs
-MPY_INC_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_inclist
-MPY_OBJ_FILE = $(MTB_PRJ_NS_BUILD_DIR)/.mpy_objlist
-MPY_FLAG_FILES = $(MPY_LDFLAGS_FILE) $(MPY_CFLAGS_FILE) $(MPY_CXXFLAGS_FILE) $(MPY_LDLIBS_FILE) $(MPY_INC_FILE) $(MPY_OBJ_FILE)
-
 MPY_SUFFIX = .mpy
 MPY_BUILD_METAFILES_NAME = $(addsuffix $(MPY_SUFFIX), $(MTB_BUILD_METAFILES_NAME)) 
 MPY_BUILD_METAFILES  = $(addprefix $(MTB_PRJ_NS_BUILD_DIR)/, $(MPY_BUILD_METAFILES_NAME))
@@ -50,28 +42,20 @@ MPY_BUILD_METAFILES  = $(addprefix $(MTB_PRJ_NS_BUILD_DIR)/, $(MPY_BUILD_METAFIL
 # MicroPython build.
 # These are created in the MTB_PRJ_NS_BUILD_DIR dir of the 
 # non-secure MTB project with the MPY_SUFFIX suffix appended.
-$(MPY_FLAG_FILES): $(MTB_BUILD_METAFILES)
-	$(Q) $(PYTHON) $(MTB_LIBS_DIR)/build-info.py all
+$(MPY_BUILD_METAFILES): $(MTB_BUILD_METAFILES)
+	$(Q) $(PYTHON) $(MTB_LIBS_DIR)/build-info.py $^ --prj-dir $(MTB_PRJ_NS_DIR) --metafiles-dir $(MTB_PRJ_NS_BUILD_DIR) --suffix $(MPY_SUFFIX)
 
-# TODO: We need to pass to the script the paths, the suffix, and the file list
-
-mtb_process_build_info: $(MPY_FLAG_FILES)
+mtb_process_build_info: $(MPY_BUILD_METAFILES)
 
 mtb_build_ns_info: mtb_process_build_info
-	$(eval CFLAGS += $(file < $(MPY_CFLAGS_FILE)) $(file < $(MTB_DEFINES_FILE)))
-	$(eval CXXFLAGS += $(file < $(MPY_CXXFLAGS_FILE)) $(file < $(MTB_DEFINES_FILE)))
-	$(eval LDFLAGS += $(file < $(MPY_LDFLAGS_FILE)))
-	$(eval LIBS += $(file < $(MPY_LDLIBS_FILE)))
-	$(eval INC += $(file < $(MPY_INC_FILE)))
-	$(eval OBJ += $(file < $(MPY_OBJ_FILE)))
-
-# mtb_build_ns_info: mtb_process_build_info
-# 	$(eval CFLAGS += $(file < $(filter %cflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))) $(file < $(MTB_DEFINES_FILE)))
-# 	$(eval CXXFLAGS += $(file < $(filter %cxxflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))) $(file < $(MTB_DEFINES_FILE)))
-# 	$(eval LDFLAGS += $(file < $(filter %ldflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
-# 	$(eval LIBS += $(file < $(filter %ldlibs$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
-# 	$(eval INC += $(file < $(filter %$(MPY_APP_NAME).ninja$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
-# 	$(eval OBJ += $(file < $(filter %$(MPY_APP_NAME).elf.rsp$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval CFLAGS   += $(file < $(filter %cflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval CFLAGS   += $(file < $(filter %defines$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval CXXFLAGS += $(file < $(filter %cxxflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval CXXFLAGS += $(file < $(filter %defines$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval LDFLAGS  += $(file < $(filter %ldflags$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval LIBS     += $(file < $(filter %ldlibs$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval INC      += $(file < $(filter %$(MPY_APP_NAME).ninja$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval OBJ      += $(file < $(filter %$(MPY_APP_NAME).elf.rsp$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
 
 ################################################################################
 
