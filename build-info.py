@@ -1,284 +1,263 @@
 import argparse, os
 
-DEFAULT_MTB_LIB_DIR = "../../lib/mtb-psoc-edge-libs"
-MTB_PRJ_RELATIVE_ROOT_PATH = ".."
-DEFAULT_MPY_FLAGS_BUILD_DIR = "../../lib/mtb-psoc-edge-libs/proj_cm33_ns/build/APP_KIT_PSE84_AI/Debug"
-DEFAULT_MTB_LIB_PRJ_DIR = "../../lib/mtb-psoc-edge-libs/proj_cm33_ns"
+class InfoBuilder:
 
-def get_content(file):
-    with open(file, "r") as f:
-        f_content = f.read()
-
-    return f_content
-
-def get_c_cxx_flags(dot_c_cxx_flags_file):
-    ''' 
-    Retrieve the compiler flags from the .cflags file.
-    The flags are contained between the '-c' and the 
-    '-MMD' flag.
-    '''
-    def find_flags_start(build_cmd_list):
-        return build_cmd_list.index("-c") + 1  # next is the first element
-
-    def find_flags_end(build_cmd_list):
-        return build_cmd_list.index("-MMD")  # '-MMD' is the last element
-
-    c_ccx_flags_list = get_content(dot_c_cxx_flags_file).split()
-    start_index = find_flags_start(c_ccx_flags_list)
-    end_index = find_flags_end(c_ccx_flags_list)
-
-    c_cxx_flags = c_ccx_flags_list[start_index:end_index]
-
-    # Dump this content in a file with is called .mpy_cflags
-    if dot_c_cxx_flags_file.endswith(".cflags"):
-        out_file = ".mpy_cflags"
-    elif dot_c_cxx_flags_file.endswith(".cxxflags"):
-        out_file = ".mpy_cxxflags"
-
-    with open(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, out_file), "w") as f:
-        f.write(" ".join(c_cxx_flags) + "\n")
-
- 
-def get_ldflags(dot_ldflags_file, mtb_lib_path=DEFAULT_MTB_LIB_DIR, mtb_prj_path=MTB_PRJ_RELATIVE_ROOT_PATH):
-    ''' 
-    Retrieve the linker flags from the .ldflags file.
-    Replaces the mtb project relative paths to the micropython
-    project relative paths.
-    '''
-    def find_flags_end(link_cmd_list):
+    def __init__(self, prj_dir, metafiles_dir, suffix, build_dir=None):
         '''
-        The linker flags required are considered until the "-T" 
-        linker flag, which specifies the location of the linker script
-        The map file, objects and output .elf is set by the micropython 
-        domain.
+        Initialize the InfoBuilder with project paths and settings.
+        Args:
+            prj_dir (str):       Path of the target project from an MTB multi project application.
+            metafiles_dir (str): Directory containing the output build files (.cflags, .ldflags, etc.). 
+                                 Usually the build directory of the target project.
+            suffix (str):        Suffix to append to the output files.
+            build_dir (str):     Directory to store the output processed build info files. 
+                                 If not set, defaults to metafiles_dir. 
         '''
-        end_delimiter = "-T"
-        link_script_file_param = [item for item in link_cmd_list if item.startswith(end_delimiter)]
-        return link_cmd_list.index(link_script_file_param[0]) + 1
-   
-    def replace_lib_search_path(link_cmd_list, mtb_lib_path, mtb_prj_path):
+        self.prj_dir = prj_dir
+        self.metafiles_dir = metafiles_dir
+        self.suffix = suffix
+        if build_dir is None:
+            self.build_dir = self.metafiles_dir
+        else:
+            self.build_dir = self.metafiles_dir
+
+        # Each file type has its own build info function
+        self.file_type_builder = {
+            ".defines" : self.filter_defines,
+            ".cflags"  : self.filter_c_cxx_flags, 
+            ".cxxflags": self.filter_c_cxx_flags, 
+            ".ldflags" : self.filter_replace_path_ldflags, 
+            ".ldlibs"  : self.replace_path_ldlibs,  
+            ".ninja"   : self.find_extract_inclist_ninja, 
+            ".elf.rsp" : self.replace_path_elf_rsp, 
+        }
+
+    def build_info(self, metafile_list):
         '''
-        Replace the paths in the linker flags to be relative to the micropython project
-        for the library search paths (-L).
-
-        For example: 
-
-            "-L ../bsps/TARGET_APP_KIT_PSE84_AI/"
-
-        will be replaced by
-
-            "-L ../../lib/mtb-psoc-edge-libs/bsps/TARGET_APP_KIT_PSE84_AI/
-
-        being the MTB proj relative path "../" and the MTB lib path "../../lib/mtb-psoc-edge-libs".
+        Process a list of metafiles and generate corresponding build info files.
+        For each metafile, determine its type and call the appropriate builder function.
+        If the metafile type is unsupported, skip it with a message.
+        Args:
+            metafile_list (list): List of paths to metafiles to process.
         '''
+        for metafile in metafile_list:
+            builder_func = self.get_builder(metafile)
+            metafile_content = InfoBuilder.get_content(metafile)
+            build_info_content = builder_func(metafile_content)
+            self.save(metafile, build_info_content)
 
-        flag_delimiter = "-L"
-
-        for i, item in enumerate(link_cmd_list):
-            # if item is equal to flag_delimiter:   
-            if item == flag_delimiter:
-                path = link_cmd_list[i + 1]  # The path is the next item
-                if path.startswith(mtb_prj_path):
-                    new_path = path.replace(mtb_prj_path, mtb_lib_path)
-                    link_cmd_list[i + 1] = new_path  # Update the path in the list
-
-
-    def replace_linker_script_path(link_cmd_list, mtb_lib_path, mtb_prj_path):
-
+    @staticmethod
+    def get_content(file):
+        ''' 
+        Read the content of a file and return it as a string.
+        Args:
+            file (str): Path to the file.
+        Returns:
+            str: Content of the file.
         '''
-        Replace the paths in the linker flags to be relative to the micropython project
-        for the linker script path.
+        with open(file, "r") as f:
+            f_content = f.read()
 
-        For example: 
+        return f_content
 
-            "-T../bsps/TARGET_APP_KIT_PSE84_AI/linker_script.ld"
-
-        will be replaced by
-
-            "-T../../lib/mtb-psoc-edge-libs/bsps/TARGET_APP_KIT_PSE84_AI/linker_script.ld"
-
-        being the MTB proj relative path "../" and the MTB lib path "../../lib/mtb-psoc-edge-libs".
+    def get_builder(self, metafile):
         '''
-        for i, item in enumerate(link_cmd_list):
-            if item.startswith("-T"):
-                new_path = item.replace(mtb_prj_path, mtb_lib_path)
-                link_cmd_list[i] = new_path  # Update the path in the list
+        Determine the type of metafile and return the corresponding builder function.
+        First we remove the path to get only the file name.
+        Then we check the file extension against the supported types.
+        If no match is found, return None.
 
+        Args:
+            metafile (str): Path to the metafile.
+        Returns:
+            function or None: Corresponding builder function or None if unsupported.
+        '''
+        metafile_name = os.path.basename(metafile)
 
-    ld_flags_list = get_content(dot_ldflags_file).split()
-
-    end_index = find_flags_end(ld_flags_list)
-    replace_lib_search_path(ld_flags_list, mtb_lib_path, mtb_prj_path)
-    replace_linker_script_path(ld_flags_list, mtb_lib_path, mtb_prj_path)
-
-    ld_flags = ld_flags_list[:end_index]
-
-    # Dump this content in a file with is called .mpy_ldflags
-    with open(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".mpy_ldflags"), "w") as f:
-        f.write(" ".join(ld_flags) + "\n")
-
- 
-def get_ldlibs(dot_ldflags_file, mtb_lib_path=DEFAULT_MTB_LIB_DIR, mtb_prj_path=MTB_PRJ_RELATIVE_ROOT_PATH):
-    ''' 
-    Retrieve additional linking libraries or objects from the .ldlibs file.
-    Replaces the mtb project relative paths to the micropython
-    project relative paths.
-    '''
-    ld_libs_list = get_content(dot_ldflags_file).split()
-
-    for i, item in enumerate(ld_libs_list):
-        if item.startswith(mtb_prj_path):
-            new_path = item.replace(mtb_prj_path, mtb_lib_path)
-            ld_libs_list[i] = new_path  # Update the path in the list
-
-    # Dump this content in a file with is called .mpy_ldlibs
-    with open(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".mpy_ldlibs"), "w") as f:
-        f.write(" ".join(ld_libs_list) + "\n")
-
-def get_inclist(dot_ninja_file):
-    
-    # We are going to parse the .ninja file and look for the "incflags" entries:
-    # Then we will parse each line removing the $ delimiters and stripping the spaces.
-    
-    inc_list = []
-    
-    try:
-        with open(dot_ninja_file, 'r') as f:
-            lines = f.readlines()
+        extensions_list = list(self.file_type_builder.keys())
         
-        # Find the incflags section
-        in_incflags_section = False
-        for line in lines:
+        for ext in extensions_list:
+            if metafile_name.endswith(ext):
+                return self.file_type_builder[ext]
+        
+        raise Exception(f"Unsupported metafile type: {metafile_name}")
+
+    def save(self, metafile, content):
+        '''
+        Save the processed content to a file in the build directory with the specified suffix.
+        
+        Args:
+            metafile (str): Path to the original metafile.
+            content (str): Processed content to save in the output file.
+        '''
+        metafile_name = os.path.basename(metafile)
+        out_file = f"{metafile_name}{self.suffix}"
+
+        out_path = os.path.join(self.build_dir, out_file)
+
+        with open(out_path, "w") as f:
+            f.write(" ".join(content) + "\n")
+
+    def filter_defines(self, dot_defines_content):
+        ''' 
+        The defines do not need any processing.
+        This is just to keep the same interface as the other functions.
+        Args:
+            dot_defines_content (str): Content of the .defines file.
+        Returns:
+            list: List of defines.
+        '''
+        return dot_defines_content.split()
+
+    def filter_c_cxx_flags(self, dot_c_ccx_flags_content):
+        ''' 
+        Retrieve the compiler flags from the .cflags file.
+        The flags are contained between the '-c' and the 
+        '-MMD' flag.
+
+        Args:
+            dot_c_ccx_flags_content (str): Content of the .cflags or .cxxflags file.
+        Returns:
+            list: List of filtered compiler flags.
+        '''
+        c_ccx_flags_list = dot_c_ccx_flags_content.split()
+        start_index = c_ccx_flags_list.index("-c") + 1 # next is the first element
+        end_index = c_ccx_flags_list.index("-MMD")     # '-MMD' is the last element
+
+        return c_ccx_flags_list[start_index:end_index]
+
+    def filter_replace_path_ldflags(self, dot_ldflags_content):
+        ''' 
+        Retrieve the linker flags from the .ldflags file.
+        Replaces the mtb project relative paths to the micropython
+        project relative paths.
+        Args:
+            dot_ldflags_content (str): Content of the .ldflags file.
+        Returns:
+            list: List of filtered and path-updated linker flags.
+        '''
+        link_cmd_list = dot_ldflags_content.split()
+        link_script_file_param = [item for item in link_cmd_list if item.startswith("-T")] # The linker script is the last element we want to keep
+        end_index = link_cmd_list.index(link_script_file_param[0]) + 1 
+        filtered_ld_flags = link_cmd_list[:end_index]
+
+        for i, item in enumerate(filtered_ld_flags):
+            
+            # Additional linker library search paths
+            if item == "-L":
+                path = filtered_ld_flags[i + 1]  # The path is the next item
+                new_path = os.path.join(self.prj_dir, path)
+                filtered_ld_flags[i + 1] = new_path  # Update the path in the list
+
+            # Linker script path
+            if item.startswith("-T"):
+                path = item[3:]  # The path is the part after -T"
+                new_path = "-T\"" + os.path.join(self.prj_dir, path)
+                filtered_ld_flags[i] = new_path  # Update the path in the list
+
+        return filtered_ld_flags
+
+    def replace_path_ldlibs(self, dot_ldflags_content):
+        ''' 
+        Retrieve additional linking libraries or objects from the .ldlibs file.
+        Replaces the mtb project relative paths to the micropython
+        project relative paths.
+        '''
+        ld_libs_list = dot_ldflags_content.split()
+
+        for i, item in enumerate(ld_libs_list):
+            new_path = os.path.join(self.prj_dir, item)
+            ld_libs_list[i] = new_path
+           
+        return ld_libs_list
+
+    def find_extract_inclist_ninja(self, dot_ninja_content):
+        '''
+        Parse the .ninja file content and extract the include paths from the incflags section.
+        The includes are not present in .includes file.
+        Each of the include path is in a new line starting with '$' and ending with '$'.
+        Those scape characters need to be removed, together with the leading and trailing spaces.
+
+        Args: 
+            dot_ninja_content (str): Content of the .ninja file.
+        Returns:
+            list: List of include paths with -I prefix.
+        '''
+        dot_nina_file_lines = dot_ninja_content.splitlines()
+
+        inc_list = []
+        in_incflags_section = False # Tracking the include flags section
+
+        for line in dot_nina_file_lines:
             line = line.strip()
             
             # Start of incflags section
             if line.startswith('incflags = $'):
                 in_incflags_section = True
                 continue
-            
+                
             # End of incflags section (next variable definition or empty line)
             if in_incflags_section and (line == '' or (line != '' and not line.startswith('$ -I') and '=' in line)):
                 break
             
             # Process incflags lines
             if in_incflags_section and line.startswith('$ -I'):
-                # Remove '$ -I' prefix and '$' suffix, then strip spaces
-                include_path = line[4:].rstrip('$').strip()
-                if include_path:  # Only add non-empty paths
-                    inc_list.append('-I' + include_path)
-    
-    except FileNotFoundError:
-        print(f"Error: Ninja file not found: {app_ninja_file}")
-        return
-    except Exception as e:
-        print(f"Error parsing ninja file: {e}")
-        return
+                # Remove '$' prefix and '$' suffix, then strip spaces
+                include_path = line[1:].rstrip('$').strip()
+                # Append the project path to the include path
+                path = include_path[len("-I"):]  # The path is the part after -T"
+                new_inc_path = "-I" + os.path.join(self.prj_dir, path)
+                inc_list.append(new_inc_path)
 
-    for i, path in enumerate(inc_list):
-        if path.startswith("-I"):
-            new_path = path.replace("-I", "-I" + DEFAULT_MTB_LIB_PRJ_DIR + "/")
-            inc_list[i] = new_path  # Update the path in the list
+        return inc_list
     
-    # Dump this content in a file called .mpy_inclist
-    with open(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".mpy_inclist"), "w") as f:
-        f.write(" ".join(inc_list) + "\n")
+    def replace_path_elf_rsp(self, elf_rsp_content):
+        '''
+        Parse the .elf.rsp file content and replace absolute and relative paths
+        to be relative to the micropython project directory.
+        Also removes main.o object from the list.
 
-def get_objlist(elf_rsp_file):
-    
-    # Read the .rsp file and process object file paths
-    # Convert absolute paths to relative paths to ports/psoc-edge
-    # Remove main.o object
-    # Replace ../ paths from proj_cm33_ns with relative paths to ports/psoc-edge
-    
-    obj_list = []
-    
-    try:
-        with open(elf_rsp_file, 'r') as f:
-            content = f.read().strip()
-        
-        # Split the content by spaces to get individual object files
-        obj_files = content.split()
-        
-        for obj_file in obj_files:
-            obj_file = obj_file.strip()
-            if not obj_file:
+        Args:
+            elf_rsp_content (str): Content of the .elf.rsp file.
+        Returns:
+            list: List of object files with updated paths.
+        '''
+        rsp_list = elf_rsp_content.split()
+        obj_list = []
+        for item in rsp_list:
+
+            # Do not add main.o
+            # This project main is just used for the ns build.
+            if item.endswith('/main.o') or item == 'main.o':
                 continue
-            
-            # Skip main.o object
-            if obj_file.endswith('/main.o') or obj_file == 'main.o':
-                continue
-            
-            # Convert absolute paths to relative paths
-            if obj_file.startswith('/'):
-                # Find the mtb-psoc-edge-libs base path in the absolute path
-                if '/lib/mtb-psoc-edge-libs/' in obj_file:
-                    # Extract the part after mtb-psoc-edge-libs
-                    parts = obj_file.split('/lib/mtb-psoc-edge-libs/')
-                    if len(parts) > 1:
-                        relative_part = parts[1]
-                        # Convert to relative path from ports/psoc-edge
-                        obj_file = '../../lib/mtb-psoc-edge-libs/' + relative_part
-            
-            # Handle ../ paths from proj_cm33_ns (these are already relative)
-            # These paths like "../proj_cm33_s/nsc_veneer.o" should become "../../lib/mtb-psoc-edge-libs/proj_cm33_s/nsc_veneer.o"
-            elif obj_file.startswith('../'):
-                # Remove the ../ prefix and add the full relative path from ports/psoc-edge
-                relative_part = obj_file[3:]  # Remove "../"
-                obj_file = '../../lib/mtb-psoc-edge-libs/' + relative_part
-            
-            # Add the processed object file to the list
-            if obj_file:
-                obj_list.append(obj_file)
-    
-    except FileNotFoundError:
-        print(f"Error: Response file not found: {elf_rsp_file}")
-        return
-    except Exception as e:
-        print(f"Error parsing response file: {e}")
-        return
-    
-    # Dump this content in a file called .mpy_objlist
-    with open(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".mpy_objlist"), "w") as f:
-        f.write(" ".join(obj_list) + "\n")
 
-def get_all_flags(file):
-    print("Getting all flags...")
-    get_c_cxx_flags(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".cflags"))
-    get_c_cxx_flags(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".cxxflags"))
-    get_ldflags(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".ldflags"))
-    get_ldlibs(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, ".ldlibs"))
-    dot_ninja_file = [f for f in os.listdir(DEFAULT_MPY_FLAGS_BUILD_DIR) if f.endswith('.ninja')][0]
-    get_inclist(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, dot_ninja_file))
-    dot_elf_rsp_file = [f for f in os.listdir(DEFAULT_MPY_FLAGS_BUILD_DIR) if f.endswith('.elf.rsp')][0]
-    get_objlist(os.path.join(DEFAULT_MPY_FLAGS_BUILD_DIR, dot_elf_rsp_file))
+            # Check if the path is absolute
+            if os.path.isabs(item):
+                obj_list.append(os.path.relpath(item))  
 
-flags_func = {
-    "cflags"  : get_c_cxx_flags,
-    "cxxflags": get_c_cxx_flags,
-    "ldflags" : get_ldflags,
-    "ldlibs"  : get_ldlibs,
-    "inclist" : get_inclist,
-    "objlist" : get_objlist,
-    "all"     : get_all_flags,
-}
+            else:
+                obj_list.append(os.path.join(self.prj_dir, item))
 
-def build_info(type, file=None):
-    print("DOING THE FUNCTION TYPE: ", type)
-    flags_func[type](file)
+        return obj_list
+                 
 
 def parser():
+    '''
+    Parse command line arguments.
 
-    cmd_list = list(flags_func.keys())
-
+    Returns:
+            argparse.Namespace: Parsed arguments.
+    '''
     parser = argparse.ArgumentParser(description="Utility to retrieve ModusToolbox build info")
-    parser.add_argument("flags", choices=cmd_list, help="Type of flags to retrieve")
-    parser.add_argument("-f","--file", default=None, type=str, help="File to retrieve the flags from")
+    parser.add_argument("build_metafiles", nargs='*', help="List of build metafiles to process")
+    parser.add_argument("--prj-dir", type=str, help="Path of the target project from an MTB multi project application")
+    parser.add_argument("--metafiles-dir", type=str,  help="Directory containing the output build files (.cflags, .ldflags, etc.). Usually the build directory of the target project.")
+    parser.add_argument("--build_dir", type=str, default=None, help="Directory to store the output processed build info files.")
+    parser.add_argument("--suffix", type=str, help="Suffix to append to the output files")
 
-    parser.add_argument("--build_dir", type=str, default=DEFAULT_MPY_FLAGS_BUILD_DIR, help="Build directory")
-    parser.add_argument("--mtb-lib-dir", type=str, default=DEFAULT_MTB_LIB_DIR, help="Path to the MTB libraries")
-
-    args = parser.parse_args()
-    build_info(args.flags, args.file) #args.build_dir)
+    return parser.parse_args()
 
 if __name__ == "__main__":
-    parser()
+    args = parser()
+    info_builder = InfoBuilder(args.prj_dir, args.metafiles_dir, args.suffix, args.build_dir)
+    info_builder.build_info(args.build_metafiles)
