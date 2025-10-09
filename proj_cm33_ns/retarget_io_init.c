@@ -49,7 +49,7 @@
 *******************************************************************************/
 /* For the RetargetIO (Debug UART) usage. */
 static cy_stc_scb_uart_context_t    DEBUG_UART_context;  
-static mtb_hal_uart_t               DEBUG_UART_hal_obj;  
+mtb_hal_uart_t               DEBUG_UART_hal_obj;  
 
 /* Retarget-io deepsleep callback parameters  */
 #if (CY_CFG_PWR_SYS_IDLE_MODE == CY_CFG_PWR_MODE_DEEPSLEEP)
