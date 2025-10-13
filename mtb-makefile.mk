@@ -56,6 +56,7 @@ mtb_build_ns_info: mtb_process_build_info
 	$(eval LIBS     += $(file < $(filter %ldlibs$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
 	$(eval INC      += $(file < $(filter %$(MPY_APP_NAME).ninja$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
 	$(eval OBJ      += $(file < $(filter %$(MPY_APP_NAME).elf.rsp$(MPY_SUFFIX), $(MPY_BUILD_METAFILES))))
+	$(eval QSTR_GEN_CFLAGS += $(INC) $(CFLAGS))
 
 ################################################################################
 
