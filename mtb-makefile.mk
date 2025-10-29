@@ -126,7 +126,7 @@ endif
 
 attached_devs:
 	@:
-	$(eval ATTACHED_TARGET_LIST = $(shell $(PYTHON) $(TOP)/tools/psoc-edge/get-devs.py serial-number $(MULTI_BOARD_DEVS_OPTS)))
+	$(eval ATTACHED_TARGET_LIST = $(shell $(PYTHON) $(TOP)/lib/mpy-test-ext/get_devs.py serial-number $(MULTI_BOARD_DEVS_OPTS)))
 	$(eval ATTACHED_TARGETS_NUMBER = $(words $(ATTACHED_TARGET_LIST)))
 	$(info Number of attached targets : $(ATTACHED_TARGETS_NUMBER))
 	$(info List of attached targets : $(ATTACHED_TARGET_LIST))
