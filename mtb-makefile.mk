@@ -84,11 +84,7 @@ mtb_build_s: mpy_build_hex_copy
 mtb_program:
 	$(info )
 	$(info Deploying firmware in board $(BOARD)...)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(HEX_FILE) MTB_PROBE_SERIAL=$(DEVICE_SN) MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA= 
-
-mtb_program_multi: attached_devs
-	@:
-	$(foreach ATTACHED_TARGET, $(ATTACHED_TARGET_LIST), $(Q) $(MAKE) mtb_program DEVICE_SN=$(ATTACHED_TARGET);)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(HEX_FILE) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA= 
 
 mtb_clean:
 	$(info )
@@ -105,34 +101,13 @@ mtb_build_help:
 	$(info 	mtb_build_ns            Build the cm33 non-secure project)
 	$(info  mtb_build_ns_info       Retrieve build flags for cm33 non-secure build)
 	$(info 	mtb_program             Program the built firmware to the connected board.)
-	$(info 	..                      Use DEVICE_SN to specify the board serial number)
-	$(info 	mtb_program_multi       Program the built firmware to all connected boards.)
+	$(info 	..                      Use DEV_SERIAL_NUMBER to specify the board serial number.)
 	$(info 	mtb_clean               Clean the ModusToolbox build files)
 	$(info 	mtb_build_help          Show this help message)
 	$(info )
-
-# When multiple types of boards are connected, a devs file needs to be provided.
-# When working locally, if a "local-devs.yml" file is placed in "tools/psoc-edge"
-# it will be used
-ifneq ($(DEVS_FILE),)
-MULTI_BOARD_DEVS_OPTS = -b $(BOARD) -y $(DEVS_FILE)
-else 
-DFLT_LOCAL_DEVS_FILE_NAME = local-devs.yml
-LOCAL_DEVS_FILE=$(TOP)/tools/psoc6/$(DFLT_LOCAL_DEVS_FILE_NAME)
-ifneq (,$(wildcard $(LOCAL_DEVS_FILE)))
-MULTI_BOARD_DEVS_OPTS = -b $(BOARD) -y $(LOCAL_DEVS_FILE)
-endif
-endif
-
-attached_devs:
-	@:
-	$(eval ATTACHED_TARGET_LIST = $(shell $(PYTHON) $(TOP)/lib/mpy-test-ext/get_devs.py serial-number $(MULTI_BOARD_DEVS_OPTS)))
-	$(eval ATTACHED_TARGETS_NUMBER = $(words $(ATTACHED_TARGET_LIST)))
-	$(info Number of attached targets : $(ATTACHED_TARGETS_NUMBER))
-	$(info List of attached targets : $(ATTACHED_TARGET_LIST))
 
 ifdef EXT_HEX_FILE
 HEX_FILE = "../"$(EXT_HEX_FILE)
 endif
 
-.PHONY: mtb_build_ns mtb_build_s mtb_build_ns_info mtb_program mtb_program_multi mtb_clean mtb_build_help
+.PHONY: mtb_build_ns mtb_build_s mtb_build_ns_info mtb_program mtb_clean mtb_build_help
