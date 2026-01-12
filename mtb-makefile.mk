@@ -77,7 +77,12 @@ mpy_build_hex_copy: $(MTB_LIBS_BUILD_PRJ_HEX_DIR)/$(MPY_APP_NAME).hex
 mtb_build_s: mpy_build_hex_copy
 	$(info )
 	$(info Building $(BOARD) in $(CONFIG) mode using MTB ...)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS=proj_cm33_s build
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS="proj_cm33_s" build
+
+mtb_build_m55:
+	$(info )
+	$(info Building CM55 project for $(BOARD) in $(CONFIG) mode using MTB ...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS="proj_cm55" build
 
 #################################################################################
 
@@ -92,6 +97,11 @@ mtb_clean:
 	-$(Q) $(MAKE) -C $(MTB_LIBS_DIR) clean MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS)
 	-$(Q) rm -rf $(MTB_LIBS_DIR)/build
 
+mtb_clean_m55:
+	$(info )
+	$(info Cleaning CM55 build project)
+	-$(Q) $(MAKE) -C $(MTB_LIBS_DIR) clean MTB_PROJECTS="proj_cm55" $(MPY_MTB_MAKE_VARS)
+
 mtb_build_help:
 	@:
 	$(info )
@@ -100,9 +110,11 @@ mtb_build_help:
 	$(info 	mtb_build_s             Build the cm33 secure project)
 	$(info 	mtb_build_ns            Build the cm33 non-secure project)
 	$(info  mtb_build_ns_info       Retrieve build flags for cm33 non-secure build)
+	$(info 	mtb_build_m55           Build the cm55 project)
 	$(info 	mtb_program             Program the built firmware to the connected board.)
 	$(info 	..                      Use DEV_SERIAL_NUMBER to specify the board serial number.)
-	$(info 	mtb_clean               Clean the ModusToolbox build files)
+	$(info  mtb_clean               Clean the ModusToolbox build files)
+	$(info 	mtb_clean_m55           Clean the CM55 ModusToolbox build files)
 	$(info 	mtb_build_help          Show this help message)
 	$(info )
 
@@ -110,4 +122,4 @@ ifdef EXT_HEX_FILE
 HEX_FILE = "../"$(EXT_HEX_FILE)
 endif
 
-.PHONY: mtb_build_ns mtb_build_s mtb_build_ns_info mtb_program mtb_clean mtb_build_help
+.PHONY: mtb_build_ns mtb_build_s mtb_build_m55 mtb_build_ns_info mtb_program mtb_clean mtb_clean_m55 mtb_build_help
