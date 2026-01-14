@@ -1,12 +1,5 @@
 MTB_LIBS_DIR ?= $(TOP)/lib/mtb-psoc-edge-libs
 
-# Locate ModusToolbox tools directory if not already defined
-ifeq ($(CY_TOOLS_DIR),)
-CY_TOOLS_PATHS ?= $(wildcard \
-    /opt/Tools/ModusToolbox/tools_* \
-    /Applications/ModusToolbox/tools_*)
-CY_TOOLS_DIR=$(lastword $(sort $(wildcard $(CY_TOOLS_PATHS))))
-endif
 
 # This file is used to track the current active bsp in 
 # the ModusToolbox library project.
@@ -63,18 +56,16 @@ mtb_get_libs:
 	$(info Retrieving ModusToolbox dependencies ...)
 	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) getlibs MTB_PROJECTS="proj_cm33_s proj_cm33_ns proj_cm55"
 	$(info )
-#$(info Setting up library dependencies for all projects ...)
-#$(Q) cd $(MTB_LIBS_DIR); $(CY_TOOLS_DIR)/library-manager/library-manager-cli --project . --set-active-bsp APP_$(BOARD)
 
 mtb_add_bsp:
 	$(info )
 	$(info Adding board $(BOARD) dependencies ...)
-	$(Q) cd $(MTB_LIBS_DIR); $(CY_TOOLS_DIR)/library-manager/library-manager-cli --project . --add-bsp-name $(BOARD) --add-bsp-version $(BOARD_VERSION)
+	$(Q) cd $(MTB_LIBS_DIR); library-manager-cli --project . --add-bsp-name $(BOARD) --add-bsp-version $(BOARD_VERSION)
 
 mtb_set_bsp: 
 	$(info )
 	$(info Setting board $(BOARD) as active ...)
-	$(Q) cd $(MTB_LIBS_DIR); $(CY_TOOLS_DIR)/library-manager/library-manager-cli --project . --set-active-bsp APP_$(BOARD)
+	$(Q) cd $(MTB_LIBS_DIR); library-manager-cli --project . --set-active-bsp APP_$(BOARD)
 
 mtb_deinit: mtb_clean
 	$(info )
