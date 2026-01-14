@@ -159,3 +159,7 @@ assetlocks.json
 
 # TODO: Check why this this file is not in build
 nsc_veneer.o
+
+# IDE configuration files
+.clang-format
+.clangd
