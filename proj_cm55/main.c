@@ -46,12 +46,20 @@
 *******************************************************************************/
 #define RESET_VAL                   (0U)
 
+/* IPC Commands for counter demo */
+#define IPC_CMD_INCREMENT           (0x84)
+#define IPC_CMD_GET_COUNTER         (0x85)
+#define IPC_CMD_COUNTER_RESPONSE    (0x86)
+
 /*******************************************************************************
 * Global Variable(s)
 *******************************************************************************/
 static volatile bool cm55_msg_received = false;
+static volatile bool cm55_need_to_send_response = false;
 
 CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
+CY_SECTION_SHAREDMEM static ipc_msg_t cm55_response_data;
+CY_SECTION_SHAREDMEM static uint32_t cm55_counter = 0;
 
 /*******************************************************************************
 * Function Name: cm55_msg_callback
@@ -70,8 +78,33 @@ void cm55_msg_callback(uint32_t * msgData)
 {
     if (msgData != NULL)
     {
-        /* Message received from CM33 */
-        cm55_msg_received = true;
+        ipc_msg_t *msg = (ipc_msg_t *)msgData;
+        
+        /* Handle different commands */
+        switch (msg->cmd)
+        {
+            case IPC_CMD_INCREMENT:
+                cm55_counter++;
+                cm55_response_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+                cm55_response_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
+                cm55_response_data.cmd = IPC_CMD_COUNTER_RESPONSE;
+                cm55_response_data.value = cm55_counter;
+                cm55_need_to_send_response = true;
+                break;
+                
+            case IPC_CMD_GET_COUNTER:
+                cm55_response_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+                cm55_response_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
+                cm55_response_data.cmd = IPC_CMD_COUNTER_RESPONSE;
+                cm55_response_data.value = cm55_counter;
+                cm55_need_to_send_response = true;
+                break;
+                
+            default:
+                /* Unknown command - just set flag */
+                cm55_msg_received = true;
+                break;
+        }
     }
 }
 
@@ -118,33 +151,48 @@ int main(void)
     cm55_ipc_communication_setup();
 
     /* Register a callback function to handle events on the CM55 IPC pipe */
+    cy_en_ipc_pipe_status_t pipeStatus;
     pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR, &cm55_msg_callback,
                                               (uint32_t)CM55_IPC_PIPE_CLIENT_ID);
 
     if(CY_IPC_PIPE_SUCCESS != pipeStatus)
     {
-        /* Error registering callback - blink LED rapidly as error indicator */
+        /* Error - blink LED very rapidly */
         for(;;)
         {
             Cy_GPIO_Inv(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN);
-            Cy_SysLib_Delay(100);
+            Cy_SysLib_Delay(50);
         }
     }
 
+    /* Enable IPC interrupt for CM55 */
+    NVIC_SetPriority(CY_IPC_INTR_CYPIPE_EP2, 3);
+    NVIC_EnableIRQ(CY_IPC_INTR_CYPIPE_EP2);
+
+    /* Main loop - LED blinks slowly (1Hz) when idle, faster when processing */
     for (;;)
     {
-        /* Check if message was received from CM33 */
-        if (cm55_msg_received)
+        /* Check if we need to send a response */
+        if (cm55_need_to_send_response)
         {
-            /* Toggle LED to indicate CM55 is running and received message */
-            Cy_GPIO_Inv(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN);
+            cy_en_ipc_pipe_status_t status;
+            status = Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR,
+                                           CM55_IPC_PIPE_EP_ADDR,
+                                           (void *)&cm55_response_data,
+                                           NULL);
             
-            /* Reset flag */
-            cm55_msg_received = false;
+            if (status == CY_IPC_PIPE_SUCCESS) {
+                cm55_need_to_send_response = false;
+                /* Quick blink to show response sent */
+                Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 1);
+                Cy_SysLib_Delay(50);
+                Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 0);
+            }
         }
-
-        /* Small delay */
-        Cy_SysLib_Delay(100);
+        
+        /* Normal heartbeat - toggle LED */
+        Cy_GPIO_Inv(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN);
+        Cy_SysLib_Delay(500);
     }
 }
 
