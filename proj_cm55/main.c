@@ -57,7 +57,6 @@
 static volatile bool cm55_msg_received = false;
 static volatile bool cm55_need_to_send_response = false;
 
-CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
 CY_SECTION_SHAREDMEM static ipc_msg_t cm55_response_data;
 CY_SECTION_SHAREDMEM static uint32_t cm55_counter = 0;
 
@@ -85,19 +84,29 @@ void cm55_msg_callback(uint32_t * msgData)
         {
             case IPC_CMD_INCREMENT:
                 cm55_counter++;
-                cm55_response_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+                cm55_response_data.client_id = CM55_IPC_PIPE_CLIENT_ID;
                 cm55_response_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
                 cm55_response_data.cmd = IPC_CMD_COUNTER_RESPONSE;
                 cm55_response_data.value = cm55_counter;
-                cm55_need_to_send_response = true;
+                
+                /* Send response immediately from callback */
+                Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR,
+                                       CM55_IPC_PIPE_EP_ADDR,
+                                       (void *)&cm55_response_data,
+                                       NULL);
                 break;
                 
             case IPC_CMD_GET_COUNTER:
-                cm55_response_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+                cm55_response_data.client_id = CM55_IPC_PIPE_CLIENT_ID;
                 cm55_response_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
                 cm55_response_data.cmd = IPC_CMD_COUNTER_RESPONSE;
                 cm55_response_data.value = cm55_counter;
-                cm55_need_to_send_response = true;
+                
+                /* Send response immediately from callback */
+                Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR,
+                                       CM55_IPC_PIPE_EP_ADDR,
+                                       (void *)&cm55_response_data,
+                                       NULL);
                 break;
                 
             default:
@@ -142,16 +151,13 @@ int main(void)
     /* Enable global interrupts */
     __enable_irq();
 
-    /* NOTE: retarget-io (UART printf) is NOT initialized on CM55 to avoid 
-     * conflicts with CM33's MicroPython REPL which uses the same UART.
-     * If you need debug output from CM55, use a separate UART or LED indicators.
-     */
+    /* NOTE: retarget-io (UART printf) only in CM33. #ToDo: Check how can resources be accessed in CM55
+    */
 
     /* Setup IPC communication for CM55 */
     cm55_ipc_communication_setup();
 
     /* Register a callback function to handle events on the CM55 IPC pipe */
-    cy_en_ipc_pipe_status_t pipeStatus;
     pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR, &cm55_msg_callback,
                                               (uint32_t)CM55_IPC_PIPE_CLIENT_ID);
 
@@ -169,30 +175,12 @@ int main(void)
     NVIC_SetPriority(CY_IPC_INTR_CYPIPE_EP2, 3);
     NVIC_EnableIRQ(CY_IPC_INTR_CYPIPE_EP2);
 
-    /* Main loop - LED blinks slowly (1Hz) when idle, faster when processing */
+    /* Main loop - Blink LED */
     for (;;)
     {
-        /* Check if we need to send a response */
-        if (cm55_need_to_send_response)
-        {
-            cy_en_ipc_pipe_status_t status;
-            status = Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR,
-                                           CM55_IPC_PIPE_EP_ADDR,
-                                           (void *)&cm55_response_data,
-                                           NULL);
-            
-            if (status == CY_IPC_PIPE_SUCCESS) {
-                cm55_need_to_send_response = false;
-                /* Quick blink to show response sent */
-                Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 1);
-                Cy_SysLib_Delay(50);
-                Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 0);
-            }
-        }
-        
         /* Normal heartbeat - toggle LED */
         Cy_GPIO_Inv(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN);
-        Cy_SysLib_Delay(500);
+        Cy_SysLib_Delay(1000);
     }
 }
 
