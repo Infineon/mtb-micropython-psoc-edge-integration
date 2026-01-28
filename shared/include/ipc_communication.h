@@ -82,6 +82,11 @@
 #define IPC_CMD_STOP                    (0x83)
 #define IPC_CMD_STATUS                  (0x41)
 
+/* New LED control commands (CM33->CM55) #ToDo: This could ideally be moved out of this file later*/
+#define IPC_CMD_LED_INIT                (0x92)
+#define IPC_CMD_LED_SET_ON              (0x93)
+#define IPC_CMD_LED_SET_OFF             (0x94)
+
 /*******************************************************************************
 * Enumeration
 *******************************************************************************/
