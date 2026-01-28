@@ -7,8 +7,8 @@
 #
 ################################################################################
 # \copyright
-# Copyright 2023-2025, Cypress Semiconductor Corporation (an Infineon company)
-# SPDX-License-Identifier: Apache-2.0
+# (c) 2023-2025, Infineon Technologies AG, or an affiliate of Infineon
+# Technologies AG.  SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,16 +33,11 @@ include ../common.mk
 #
 # If APPNAME is edited, ensure to update or regenerate launch
 # configurations for your IDE.
-# We are using the app name provided by the top-level MicroPython makefile
-ifeq ($(APPNAME),)
-APPNAME = proj_cm33_ns
-endif
+APPNAME=proj_cm33_ns
 
-CONFIG=Debug
 # If set to "true" or "1", display full command-lines when building.
 VERBOSE=
 
-#NSC_VENEER=
 
 ################################################################################
 # Advanced Configuration
@@ -70,11 +65,11 @@ CORE_NAME=CM33_0
 # tree for source code and builds it. The SOURCES variable can be used to
 # manually add source code to the build process from a location not searched
 # by default, or otherwise not found by the build system.
-SOURCES+=
+SOURCES+=$(wildcard ../shared/source/COMPONENT_CM33/*.c)
 
 # Like SOURCES, but for include directories. Value should be paths to
 # directories (without a leading -I).
-INCLUDES+=
+INCLUDES+=../shared/include
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF
