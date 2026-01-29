@@ -69,7 +69,7 @@ static volatile bool led_heartbeat_enabled = true;
 *  Callback function called when endpoint-2 (CM55) has received a message
 *
 * Parameters:
-*  msg_data: Message data received throuig IPC
+*  msg_data: Message data received through IPC
 *
 * Return :
 *  void
