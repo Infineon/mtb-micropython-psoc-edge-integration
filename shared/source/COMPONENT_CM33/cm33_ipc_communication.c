@@ -43,7 +43,7 @@
 * Global Variable(s)
 *******************************************************************************/
 /* Track ISR invocations for debugging */
-volatile uint32_t cm33_ipc_isr_count = 0;
+//volatile uint32_t cm33_ipc_isr_count = 0;
 
 /* Create an array of endpoint structures */
 static cy_stc_ipc_pipe_ep_t cm33_ipc_pipe_ep_array[CY_IPC_MAX_ENDPOINTS];
@@ -69,9 +69,8 @@ static uint32_t ipc_sema_array[CY_IPC_SEMA_COUNT / CY_IPC_SEMA_PER_WORD];
 *  void
 *
 *******************************************************************************/
-void cm33_ipc_pipe_isr(void)
+void c(void)
 {
-    cm33_ipc_isr_count++;
     Cy_IPC_Pipe_ExecuteCallback(CM33_IPC_PIPE_EP_ADDR);
 }
 

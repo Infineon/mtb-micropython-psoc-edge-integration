@@ -58,14 +58,6 @@ CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
 
 static volatile uint32_t msg_val = RESET_VAL;
 
-typedef enum
-{
-    BUTTON_START,
-    BUTTON_STOP,
-} en_button_status_t;
-
-static en_button_status_t button_status = BUTTON_STOP;
-
 /* Flag to control LED heartbeat - can be disabled by IPC commands */
 static volatile bool led_heartbeat_enabled = true;
 
@@ -184,6 +176,9 @@ int main(void)
     printf("****************** "
            "PSOC Edge MCU: IPC Pipes "
            "****************** \r\n\n");
+
+    // ToDo: Code following will be moved to modipc.c. This is just a placeholder
+    // for now to show how IPC communication is set up.
 
     /* Setup IPC communication for CM55*/
     cm55_ipc_communication_setup();
