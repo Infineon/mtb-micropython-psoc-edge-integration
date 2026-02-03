@@ -7,7 +7,7 @@
 #
 ################################################################################
 # \copyright
-# (c) 2023-2025, Infineon Technologies AG, or an affiliate of Infineon
+# (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
 # Technologies AG.  SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,10 +38,15 @@ APPNAME=proj_cm55
 # If set to "true" or "1", display full command-lines when building.
 VERBOSE=
 
-
 ################################################################################
 # Advanced Configuration
 ################################################################################
+
+DEFINES+=PROJECT_PREFIX=$(DEEPCRAFT_PROJECT_NAME)
+
+ifeq ($(DEEPCRAFT_PROJECT_NAME), LED_Demo)
+DEFINES+=USE_LED_DEMO
+endif
 
 # Enable optional code that is ordinarily disabled by default.
 #
@@ -53,7 +58,23 @@ VERBOSE=
 # ... then code in directories named COMPONENT_foo and COMPONENT_bar will be
 # added to the build
 #
-COMPONENTS+=
+COMPONENTS+=FREERTOS CMSIS_DSP U55 RTOS_AWARE
+
+# Lift of components for ML-middleware
+COMPONENTS+=ML_TFLM ML_INT8x8 MW_MDL_VA MW_MDL_DSNS MW_MDL_DSES MW_DSNS_MODEL
+
+# Include the Audio Voice Core library FULL or LIMITED version
+ifeq (FULL, $(CONFIG_VOICE_CORE_MODE))
+	COMPONENTS+=AVC_FULL
+endif
+ifeq (LIMITED, $(CONFIG_VOICE_CORE_MODE))
+	COMPONENTS+=AVC_DEMO
+endif
+
+# Check which kit is being used
+ifeq (APP_KIT_PSE84_AI, $(TARGET))
+DEFINES+=USE_KIT_PSE84_AI
+endif 
 
 # Like COMPONENTS, but disable optional code that was enabled by default.
 DISABLE_COMPONENTS=
@@ -65,14 +86,28 @@ CORE_NAME=CM55_0
 # tree for source code and builds it. The SOURCES variable can be used to
 # manually add source code to the build process from a location not searched
 # by default, or otherwise not found by the build system.
-SOURCES+=$(wildcard ../shared/source/COMPONENT_CM55/*.c)
+SOURCES+=
 
 # Like SOURCES, but for include directories. Value should be paths to
 # directories (without a leading -I).
-INCLUDES+=../shared/include
+INCLUDES+=
 
 # Add additional defines to the build process (without a leading -D).
-DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF CY_RTOS_AWARE 
+
+# List of defines for ML-middleware
+DEFINES+=TF_LITE_STATIC_MEMORY CY_ML_MODEL_MEM=.cy_socmem_data
+
+# List of defines for DEEPCRAFT Voice Assistant
+DEFINES+=ENABLE_IFX_SOD ENABLE_IFX_PRE_PROCESS_HPF ENABLE_IFX_VA_WWD ENABLE_IFX_VA_CMD
+
+# Add necessary defines for the DEEPCRAFT Audio Enhancement
+DEFINES+=ENABLE_AFE_MW_SUPPORT DSNS_ENABLE_MTB_ML USE_MTB_ML
+
+ifeq (ENABLED, $(USE_AUDIO_ENHANCEMENT))
+DEFINES+=USE_AUDIO_ENHANCEMENT
+endif
+
 
 # Select softfp or hardfp floating point. Default is softfp.
 VFP_SELECT+=

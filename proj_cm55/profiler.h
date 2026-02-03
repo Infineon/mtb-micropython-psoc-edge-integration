@@ -1,11 +1,8 @@
-/*******************************************************************************
- * File Name:   retarget_io_init.h
- *
- * Description:  This file is the public interface of retarget_io_init.c and 
- *               contains the necessary UART configuration parameters.
- *
- * Related Document: See README.md
- *
+/******************************************************************************
+* File Name : profiler.h
+*
+* Description :
+* Header for MCPS profiler
 ********************************************************************************
  * (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
  * Technologies AG. All rights reserved.
@@ -36,56 +33,22 @@
  * thereof can reasonably be expected to result in personal injury.
 *******************************************************************************/
 
-#ifndef _RETARGET_IO_INIT_H_
-#define _RETARGET_IO_INIT_H_
+#ifndef _PROFILER_H_
+#define _PROFILER_H_
 
-/*******************************************************************************
-* Header Files
-*******************************************************************************/
-#include "cybsp.h"
-#include "mtb_hal.h"
-#include "cy_retarget_io.h"
-#include "mtb_syspm_callbacks.h"
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
 
-/*******************************************************************************
-* Macros
-*******************************************************************************/
+void profiler_init(void);
+void profiler_start(void);
+void profiler_stop(void);
+uint32_t profiler_get_cycles(void);
 
-/* retarget-io deepsleep callback macros */
-#define DEBUG_UART_RTS_PORT     (NULL)
-#define DEBUG_UART_RTS_PIN      (0U)
-
-/* Default syspm callback configuration elements */
-#define SYSPM_SKIP_MODE         (0U)
-#define SYSPM_CALLBACK_ORDER    (1U)
-
-
-/*******************************************************************************
-* Function prototypes
-*******************************************************************************/
-void init_retarget_io(void);
-
-/*******************************************************************************
-* Function Name: handle_error
-********************************************************************************
-* Summary:
-* User defined error handling function
-*
-* Parameters:
-*  void
-*
-* Return:
-*  void
-*
-*******************************************************************************/
-__STATIC_INLINE void handle_error(void)
-{
-    /* Disable all interrupts. */
-    __disable_irq();
-
-    CY_ASSERT(0);
+#if defined(__cplusplus)
 }
+#endif /* __cplusplus */
 
-#endif /* _RETARGET_IO_INIT_H_ */
+#endif /* _PROFILER_H_ */
 
 /* [] END OF FILE */
