@@ -1,13 +1,10 @@
-/*******************************************************************************
- * File Name:   retarget_io_init.h
- *
- * Description:  This file is the public interface of retarget_io_init.c and 
- *               contains the necessary UART configuration parameters.
- *
- * Related Document: See README.md
- *
+/******************************************************************************
+* File Name : led_pwm.h
+*
+* Description :
+* Header for LED PWM driver.
 ********************************************************************************
- * (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+ * (c) 2024-2025, Infineon Technologies AG, or an affiliate of Infineon
  * Technologies AG. All rights reserved.
  * This software, associated documentation and materials ("Software") is
  * owned by Infineon Technologies AG or one of its affiliates ("Infineon")
@@ -35,57 +32,39 @@
  * application where a failure of the Product or any consequences of the use
  * thereof can reasonably be expected to result in personal injury.
 *******************************************************************************/
+#ifndef _LED_PWM_H__
+#define _LED_PWM_H__
 
-#ifndef _RETARGET_IO_INIT_H_
-#define _RETARGET_IO_INIT_H_
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
 
-/*******************************************************************************
-* Header Files
-*******************************************************************************/
-#include "cybsp.h"
-#include "mtb_hal.h"
-#include "cy_retarget_io.h"
-#include "mtb_syspm_callbacks.h"
+#include "cy_result.h"
 
 /*******************************************************************************
 * Macros
 *******************************************************************************/
+#define LED_PWM_MAX_BRIGHTNESS              (100u)
+#define LED_PWM_MIN_BRIGHTNESS              (1u)
 
-/* retarget-io deepsleep callback macros */
-#define DEBUG_UART_RTS_PORT     (NULL)
-#define DEBUG_UART_RTS_PIN      (0U)
-
-/* Default syspm callback configuration elements */
-#define SYSPM_SKIP_MODE         (0U)
-#define SYSPM_CALLBACK_ORDER    (1U)
-
+#define LED_PWM_BLUE_LED                    (1u)    
+#define LED_PWM_GREEN_LED                   (2u)
 
 /*******************************************************************************
-* Function prototypes
+* Functions Prototypes
 *******************************************************************************/
-void init_retarget_io(void);
+cy_rslt_t led_pwm_init(void);
+void led_pwm_on(uint8_t led);
+void led_pwm_off(uint8_t led);
+void led_pwm_toggle(uint8_t led);
+cy_rslt_t led_pwm_set_brightness(uint8_t led, uint8_t brightness);
+cy_rslt_t led_pwm_get_brightness(uint8_t led, uint8_t *brightness);
+void led_pwm_deinit(void);
 
-/*******************************************************************************
-* Function Name: handle_error
-********************************************************************************
-* Summary:
-* User defined error handling function
-*
-* Parameters:
-*  void
-*
-* Return:
-*  void
-*
-*******************************************************************************/
-__STATIC_INLINE void handle_error(void)
-{
-    /* Disable all interrupts. */
-    __disable_irq();
-
-    CY_ASSERT(0);
+#if defined(__cplusplus)
 }
+#endif /* __cplusplus */
 
-#endif /* _RETARGET_IO_INIT_H_ */
+#endif /* _LED_PWM_H__*/
 
 /* [] END OF FILE */

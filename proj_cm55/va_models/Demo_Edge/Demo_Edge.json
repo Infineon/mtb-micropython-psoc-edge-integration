@@ -1,0 +1,178 @@
+{
+    "projectName": "demo_edge",
+    "settings": {
+        "dict": "English-US",
+        "op_cond_db": 10,
+        "arm_core_id": "U55",
+        "nlu_timeout_ms": 0,
+        "nlu_sensitivity": 0,
+        "wwd_sensitivity": 0,
+        "nlu_pos_silence_ms": 300,
+        "nlu_pre_silence_ms": 0,
+        "wwd_pos_silence_ms": 0,
+        "wwd_pre_silence_ms": 200
+    },
+    "wakewords": [
+        {
+            "interjections": [
+                "OK"
+            ],
+            "word": "chess",
+            "phoneme": []
+        }
+    ],
+    "intents": [
+        {
+            "name": "bishopmoves",
+            "nodes": [
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "Bishop"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "bishopmoves"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "knightmoves",
+            "nodes": [
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "Knight"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Knightmoves"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "rookmoves",
+            "nodes": [
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "Rook"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Rookmoves"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "kingmoves",
+            "nodes": [
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "King"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Kingmoves"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "queenmoves",
+            "nodes": [
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "Queen"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Queenmoves"
+                    }
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "name": "bishopmoves",
+            "type": "text",
+            "phrases": [
+                "moves A1"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Knightmoves",
+            "type": "text",
+            "phrases": [
+                "moves B2"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Rookmoves",
+            "type": "text",
+            "phrases": [
+                "moves C3"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Kingmoves",
+            "type": "text",
+            "phrases": [
+                "moves D4"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Queenmoves",
+            "type": "text",
+            "phrases": [
+                "moves E5"
+            ],
+            "ranges": null,
+            "units": null
+        }
+    ]
+}

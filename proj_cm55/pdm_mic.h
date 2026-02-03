@@ -1,11 +1,8 @@
-/*******************************************************************************
- * File Name:   retarget_io_init.h
- *
- * Description:  This file is the public interface of retarget_io_init.c and 
- *               contains the necessary UART configuration parameters.
- *
- * Related Document: See README.md
- *
+/******************************************************************************
+* File Name : pdm_mic.h
+*
+* Description :
+* Header for PDM microphone driver.
 ********************************************************************************
  * (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
  * Technologies AG. All rights reserved.
@@ -35,57 +32,35 @@
  * application where a failure of the Product or any consequences of the use
  * thereof can reasonably be expected to result in personal injury.
 *******************************************************************************/
+#ifndef _PDM_MIC_H__
+#define _PDM_MIC_H__
 
-#ifndef _RETARGET_IO_INIT_H_
-#define _RETARGET_IO_INIT_H_
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
 
-/*******************************************************************************
-* Header Files
-*******************************************************************************/
-#include "cybsp.h"
-#include "mtb_hal.h"
-#include "cy_retarget_io.h"
-#include "mtb_syspm_callbacks.h"
+#include "cy_result.h"
 
 /*******************************************************************************
 * Macros
 *******************************************************************************/
-
-/* retarget-io deepsleep callback macros */
-#define DEBUG_UART_RTS_PORT     (NULL)
-#define DEBUG_UART_RTS_PIN      (0U)
-
-/* Default syspm callback configuration elements */
-#define SYSPM_SKIP_MODE         (0U)
-#define SYSPM_CALLBACK_ORDER    (1U)
-
+#define PDM_MIC_SAMPLE_RATE_HZ              (16000u)
+#define PDM_MIC_MODE                        CYHAL_PDM_PCM_MODE_LEFT
+#define PDM_MIC_NUM_CHANNEL                 (1)
+#define PDM_MIC_SAMPLES_COUNT               (160*PDM_MIC_NUM_CHANNEL)
 
 /*******************************************************************************
-* Function prototypes
+* Functions Prototypes
 *******************************************************************************/
-void init_retarget_io(void);
+cy_rslt_t pdm_mic_init(void);
+cy_rslt_t pdm_mic_get_data(int16_t **frame);
+cy_rslt_t pdm_mic_deinit(void);
 
-/*******************************************************************************
-* Function Name: handle_error
-********************************************************************************
-* Summary:
-* User defined error handling function
-*
-* Parameters:
-*  void
-*
-* Return:
-*  void
-*
-*******************************************************************************/
-__STATIC_INLINE void handle_error(void)
-{
-    /* Disable all interrupts. */
-    __disable_irq();
 
-    CY_ASSERT(0);
+#if defined(__cplusplus)
 }
+#endif /* __cplusplus */
 
-#endif /* _RETARGET_IO_INIT_H_ */
+#endif /* _PDM_MIC_INTERFACE_H__*/
 
 /* [] END OF FILE */
