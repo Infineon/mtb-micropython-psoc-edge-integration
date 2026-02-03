@@ -55,4 +55,29 @@ CONFIG=Debug
 # NOTE: Check the JSON file for the command parameters
 COMBINE_SIGN_JSON?=configs/boot_with_extended_boot.json
 
+
+# Option to enable the DEEPCRAFT Audio Enhancement.
+#
+# ENABLED   - use the audio-enhancement to filter the audio input stream before
+#             executing the voice-assistant process function.
+# DISABLED  - use raw audio input stream from microphone to the feed the 
+#             voice assistant process function.
+USE_AUDIO_ENHANCEMENT=ENABLED
+
+# Option to use FULL or LIMITED version of the Audio Voice Core library
+#
+# LIMITED - Limited time functionality (Default)
+# FULL    - Full functionality, no time limit
+#
+CONFIG_VOICE_CORE_MODE=FULL
+
+# Set the name of the project created in DEEPCRAFT Voice Assistant cloud tool 
+# and placed in the va_models/ folder.
+# Alternatively, use one of the projects below that comes with this code example
+#
+# Smart_Lights_Demo -- use the smart lights demo model (default)
+# LED_Demo          -- use the LED demo model
+# Cooktop_Demo      -- use the cooktop demo model
+DEEPCRAFT_PROJECT_NAME=Smart_Lights_Demo
+
 include ../common_app.mk

@@ -82,7 +82,7 @@ mtb_build_s: mpy_build_hex_copy
 mtb_build_m55:
 	$(info )
 	$(info Building CM55 project for $(BOARD) in $(CONFIG) mode using MTB ...)
-	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS="proj_cm55" build COMBINE_SIGN_JSON=
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) $(MPY_MTB_MAKE_VARS) MTB_PROJECTS="proj_cm55" build TOOLCHAIN=LLVM_ARM COMBINE_SIGN_JSON=
 
 #################################################################################
 
