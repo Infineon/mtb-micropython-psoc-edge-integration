@@ -69,7 +69,7 @@ USE_AUDIO_ENHANCEMENT=ENABLED
 # LIMITED - Limited time functionality (Default)
 # FULL    - Full functionality, no time limit
 #
-CONFIG_VOICE_CORE_MODE=FULL
+CONFIG_VOICE_CORE_MODE=LIMITED
 
 # Set the name of the project created in DEEPCRAFT Voice Assistant cloud tool 
 # and placed in the va_models/ folder.
