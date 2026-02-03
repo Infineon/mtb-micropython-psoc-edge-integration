@@ -37,6 +37,9 @@
 
 #include "cybsp.h"
 
+/* IPC communication includes */
+#include "ipc_communication.h"
+
 /* RTOS includes */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -107,11 +110,22 @@
  */
 #define RUNNING_MODE            (VA_MODE_WW_SINGLE_CMD) 
 
+/* IPC related macros */
+#define CM55_APP_DELAY_MS           (50U)
+#define RESET_VAL                   (0U)
+
 /*****************************************************************************
  * Variables
  *****************************************************************************/
 /* For the Tickless idle configuration*/
 static mtb_hal_lptimer_t lptimer_obj;
+
+/* IPC communication variables */
+static bool cm55_pipe2_msg_received = false;
+CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
+static volatile uint32_t msg_val = RESET_VAL;
+static volatile bool voice_assistant_enabled = false;
+static TaskHandle_t voice_assistant_task_handle = NULL;
 
 /* Breathing counter for the kit's blue LED */
 static uint8_t breathing_counter;
@@ -125,6 +139,69 @@ uint32_t bf_coeffs_total_len;
 uint32_t show_count = 0;
 uint32_t cpu_cycle_sum = 0;
 #endif
+
+/*******************************************************************************
+* Function Name: cm55_msg_callback
+********************************************************************************
+* Summary:
+*  Callback function called when endpoint-2 (CM55) has received a message
+*
+* Parameters:
+*  msgData: Message data received through IPC
+*
+* Return :
+*  void
+*
+*******************************************************************************/
+void cm55_msg_callback(uint32_t * msgData)
+{
+    ipc_msg_t *ipc_recv_msg;
+
+    if (msgData != NULL)
+    {
+        /* Cast the message received to the IPC structure */
+        ipc_recv_msg = (ipc_msg_t *) msgData;
+
+        /* Check the command type */
+        uint8_t cmd = ipc_recv_msg->cmd;
+        
+        /* Debug: Print all received commands */
+        printf("[CM55] IPC callback received command: 0x%02X\r\n", cmd);
+        
+        if (cmd == IPC_CMD_LED_SET_ON)
+        {
+            /* Enable Voice Assistant */
+            printf("[CM55] Received LED_SET_ON command - Enabling Voice Assistant\r\n");
+            voice_assistant_enabled = true;
+            
+            /* Resume the voice assistant task if it was suspended */
+            if (voice_assistant_task_handle != NULL)
+            {
+                vTaskResume(voice_assistant_task_handle);
+            }
+        }
+        else if (cmd == IPC_CMD_LED_SET_OFF)
+        {
+            /* Disable Voice Assistant */
+            printf("[CM55] Received LED_SET_OFF command - Disabling Voice Assistant\r\n");
+            voice_assistant_enabled = false;
+            
+            /* Suspend the voice assistant task */
+            if (voice_assistant_task_handle != NULL)
+            {
+                vTaskSuspend(voice_assistant_task_handle);
+            }
+        }
+        else
+        {
+            /* Extract the command to be processed in the main loop */
+            msg_val = ipc_recv_msg->value;
+        }
+    }
+
+    cm55_pipe2_msg_received = true;
+}
+
 /*******************************************************************************
 * Function Name: lptimer_interrupt_handler
 ********************************************************************************
@@ -512,6 +589,13 @@ void voice_assistant_task(void * arg)
     ae_rslt_t ae_result;
 #endif /* USE_AUDIO_ENHANCEMENT */    
     
+    printf("[CM55] Voice Assistant task started, waiting for enable command...\r\n");
+    
+    /* Initially suspend the task until enabled by IPC command */
+    vTaskSuspend(NULL);
+    
+    printf("[CM55] Voice Assistant task resumed and initializing...\r\n");
+    
     /* Initialize the PDM microphone */
     pdm_mic_init();
 
@@ -613,6 +697,14 @@ void voice_assistant_task(void * arg)
 
     for (;;)
     {
+        /* Check if voice assistant is enabled */
+        if (!voice_assistant_enabled)
+        {
+            /* If disabled, just delay and continue checking */
+            vTaskDelay(pdMS_TO_TICKS(100));
+            continue;
+        }
+        
         /* Get audio data */
         pdm_mic_get_data(&audio_frame);
 
@@ -661,6 +753,7 @@ void voice_assistant_task(void * arg)
 int main(void)
 {
     cy_rslt_t result;
+    cy_en_ipc_pipe_status_t pipeStatus;
 
     /* Initialize the device and board peripherals */
     result = cybsp_init();
@@ -682,6 +775,35 @@ int main(void)
     printf("******************************************** \r\n"
            "PSOC Edge MCU: Voice Assistant Demo          \r\n"
            "******************************************** \r\n\n");
+
+    /* Setup IPC communication for CM55*/
+    printf("[CM55] Setting up IPC communication...\r\n");
+    cm55_ipc_communication_setup();
+
+    Cy_SysLib_Delay(CM55_APP_DELAY_MS);
+
+    /* Register a callback function to handle events on the CM55 IPC pipe */
+    pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR, &cm55_msg_callback,
+                                                      (uint32_t)CM55_IPC_PIPE_CLIENT_ID);
+
+    if(CY_IPC_PIPE_SUCCESS != pipeStatus)
+    {
+        printf("[CM55] Error: Failed to register IPC callback\r\n");
+        handle_error();
+    }
+
+    /* Send initialization message to CM33 */
+    cm55_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+    cm55_msg_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK_EP2;
+    cm55_msg_data.cmd = IPC_CMD_INIT;
+    cm55_msg_data.value = RESET_VAL;
+
+    pipeStatus = Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR, 
+                                         CM55_IPC_PIPE_EP_ADDR, 
+                                         (void *) &cm55_msg_data, RESET_VAL);
+    Cy_SysLib_Delay(CM55_APP_DELAY_MS);
+
+    printf("[CM55] IPC communication setup complete. Waiting for commands...\r\n");
 
     setup_tickless_idle_timer();
 
@@ -705,14 +827,21 @@ int main(void)
     result = xTaskCreate(voice_assistant_task, 
                          VOICE_ASSISTANT_TASK_NAME, 
                          VOICE_ASSISTANT_TASK_STACK_SIZE, NULL, 
-                         VOICE_ASSISTANT_TASK_PRIORITY, NULL);
+                         VOICE_ASSISTANT_TASK_PRIORITY, &voice_assistant_task_handle);
 
-    if( pdPASS == result )
+    if( pdPASS != result )
     {
-        /* Start the RTOS Scheduler */
-        vTaskStartScheduler();
+        printf("[CM55] Error: Failed to create voice assistant task\r\n");
+        handle_error();
     }
 
+    printf("[CM55] Voice Assistant task created. Starting RTOS Scheduler...\r\n");
+    printf("[CM55] Send IPC_CMD_LED_SET_ON to enable Voice Assistant, IPC_CMD_LED_SET_OFF to disable.\r\n");
+
+    /* Start the RTOS Scheduler - this will not return */
+    vTaskStartScheduler();
+
+    /* Should never reach here */
     return 0;
 }
 
