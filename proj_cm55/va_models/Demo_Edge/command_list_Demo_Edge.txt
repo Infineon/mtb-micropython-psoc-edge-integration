@@ -1,5 +1,0 @@
-Bishop moves A1
-Knight moves B2
-Rook moves C3
-King moves D4
-Queen moves E5
