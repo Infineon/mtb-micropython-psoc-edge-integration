@@ -53,7 +53,7 @@ CY_TOOLS_DIR=$(lastword $(sort $(wildcard $(CY_TOOLS_PATHS))))
 # Make recipe.
 CY_COMPILER_GCC_ARM_DIR?=
 
-CY_COMPILER_LLVM_ARM_DIR=/home/zhanglinjing/software/LLVM-ET-Arm-19.1.5-Linux-x86_64
+CY_COMPILER_LLVM_ARM_DIR?=
 
 ifeq ($(CY_TOOLS_DIR),)
 $(error Unable to find any of the available CY_TOOLS_PATHS -- $(CY_TOOLS_PATHS))
