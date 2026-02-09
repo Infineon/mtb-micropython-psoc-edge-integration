@@ -40,6 +40,7 @@ TARGET=APP_$(BOARD)
 #
 # See also: CY_COMPILER_PATH below
 TOOLCHAIN=GCC_ARM
+# But for build the CM55 project, we need to use the LLVM toolchain. See lib/mtb-psoc-edge-libs/mtb-makefile.mk - mtb_build_m55
 
 # Default build configuration. Options include:
 #
@@ -76,8 +77,7 @@ CONFIG_VOICE_CORE_MODE=LIMITED
 # Alternatively, use one of the projects below that comes with this code example
 #
 # Smart_Lights_Demo -- use the smart lights demo model (default)
-# LED_Demo          -- use the LED demo model
-# Cooktop_Demo      -- use the cooktop demo model
-DEEPCRAFT_PROJECT_NAME=Smart_Lights_Demo
+# Chess             -- use the chess game voice control model
+DEEPCRAFT_PROJECT_NAME=Chess
 
 include ../common_app.mk
