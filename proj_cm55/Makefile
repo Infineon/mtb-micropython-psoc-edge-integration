@@ -44,10 +44,6 @@ VERBOSE=
 
 DEFINES+=PROJECT_PREFIX=$(DEEPCRAFT_PROJECT_NAME)
 
-ifeq ($(DEEPCRAFT_PROJECT_NAME), LED_Demo)
-DEFINES+=USE_LED_DEMO
-endif
-
 # Enable optional code that is ordinarily disabled by default.
 #
 # Available components depend on the specific targeted hardware and firmware

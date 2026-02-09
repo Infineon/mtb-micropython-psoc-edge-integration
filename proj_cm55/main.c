@@ -294,51 +294,6 @@ static void setup_tickless_idle_timer(void)
     cyabs_rtos_set_lptimer(&lptimer_obj);
 }
 
-#ifdef USE_LED_DEMO
-/*******************************************************************************
- * Function Name: led_demo
- *******************************************************************************
- * Summary:
- * Update the LED state and brightness based on the intent detected.
- *  
- * Parameters:
- *  intent: detected intent index
- *  brightness: LED brightness level (0-100)
-  *
- * Return:
- *  void
- *
- *******************************************************************************/
-static void led_demo(int intent, uint8_t brightness)
-{
-    /* LED PWM driver is used to control the LED brightness and state. */
-    switch (intent)
-    {
-        case LED_DEMO_INTENT_TurnOnLight:
-            led_pwm_on(LED_PWM_GREEN_LED);
-            break;
-        case LED_DEMO_INTENT_TurnOffLight:
-            led_pwm_off(LED_PWM_GREEN_LED);
-            break;
-        case LED_DEMO_INTENT_IncreaseBrightness:
-            led_pwm_set_brightness(LED_PWM_GREEN_LED, LED_PWM_MAX_BRIGHTNESS);
-            break;
-        case LED_DEMO_INTENT_DecreaseBrightness:
-            led_pwm_set_brightness(LED_PWM_GREEN_LED, LED_PWM_MIN_BRIGHTNESS);
-            break;
-        case LED_DEMO_INTENT_SetBrightness:
-            led_pwm_set_brightness(LED_PWM_GREEN_LED, brightness);
-            break;
-        case LED_DEMO_INTENT_ToggleLight:
-            led_pwm_toggle(LED_PWM_GREEN_LED);
-            break;
-        default:
-            break;
-    }
-}
-#endif
-
-
 /*******************************************************************************
  * Function Name: check_button_pressed
  *******************************************************************************
@@ -558,14 +513,6 @@ static void run_voice_assistant_process(int16_t *audio_frame)
 
     /* Print the status of the voice assistant */
     print_voice_assistant_status(va_result, va_event, &va_data);
-
-    #ifdef USE_LED_DEMO
-        /* Change the status of the LED if a command was detected */
-        if (va_event == VA_EVENT_CMD_DETECTED)
-        {
-            led_demo(va_data.intent_index, va_data.variable[0].value);
-        }
-    #endif
 }
 
 /*******************************************************************************
@@ -653,20 +600,6 @@ void voice_assistant_task(void * arg)
         breathing_counter = 0;
     }
 
-#ifdef USE_LED_DEMO
-    printf("Wake word: Okay Infineon \n\n\r");
-    printf("Example: Okay Infineon <switch on the light>\n\n\r");
-    printf("Commands: \r\n");
-    printf("1. Turn/Switch on the light \r\n");
-    printf("2. Turn/Switch off the light \r\n");
-    printf("3. Enable/Disable the light \r\n");
-    printf("4. Increase/Decrease the brightness \r\n");
-    printf("5. Make the light brighter/dimmer \r\n");
-    printf("6. Set/Adjust the brightness to <numbers 1 to 10> \r\n");
-    printf("7. Dim light to <numbers 1 to 10> \r\n");
-    printf("8. Flip/Toggle the light \r\n");
-    printf("9. Change the light state \r\n\r\n");
-#else
     /* Print the instructions */
     if ((RUNNING_MODE == VA_MODE_WW_SINGLE_CMD) || (RUNNING_MODE == VA_MODE_WW_MULTI_CMD)) 
     {
@@ -682,7 +615,6 @@ void voice_assistant_task(void * arg)
     {
         printf("\n\rSay a command.\n\r");
     }
-#endif /* USE_LED_DEMO */
 
     /* Print the behavior of the Blue LED */
     printf("Note:\r\n");
