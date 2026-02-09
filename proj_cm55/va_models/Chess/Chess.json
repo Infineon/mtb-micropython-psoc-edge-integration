@@ -1,0 +1,111 @@
+{
+    "projectName": "chess",
+    "settings": {
+        "arm_core_id": "U55",
+        "ww_false_fraction": 0.0003,
+        "cmd_reject_fraction": 0.99,
+        "sod_ww_noactivity_timeout_ms": 700,
+        "ww_cmd_maxwwgap_ms": 1500,
+        "cmd_timeout_adjust_level": 0,
+        "dict": "English-US"
+    },
+    "wakewords": [
+        {
+            "interjections": [
+                "OK"
+            ],
+            "word": "chess",
+            "phoneme": []
+        }
+    ],
+    "intents": [
+        {
+            "name": "moveByFigure",
+            "nodes": [
+                {
+                    "required": false,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "move the"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Figure"
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "text",
+                        "phrases": [
+                            "to"
+                        ]
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Letter"
+                    }
+                },
+                {
+                    "required": true,
+                    "value": {
+                        "type": "variable",
+                        "name": "Number"
+                    }
+                }
+            ]
+        }
+    ],
+    "variables": [
+        {
+            "name": "Figure",
+            "type": "text",
+            "phrases": [
+                "King",
+                "Pawn",
+                "Bishop",
+                "Knight",
+                "Rook",
+                "Queen"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Letter",
+            "type": "text",
+            "phrases": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G"
+            ],
+            "ranges": null,
+            "units": null
+        },
+        {
+            "name": "Number",
+            "type": "integer",
+            "phrases": null,
+            "ranges": [
+                "9"
+            ],
+            "units": [
+                [
+                    ""
+                ]
+            ]
+        }
+    ]
+}
