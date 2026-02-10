@@ -76,8 +76,7 @@ CONFIG_VOICE_CORE_MODE=LIMITED
 # and placed in the va_models/ folder.
 # Alternatively, use one of the projects below that comes with this code example
 #
-# Smart_Lights_Demo -- use the smart lights demo model (default)
-# Chess             -- use the chess game voice control model
+# Chess -- use the chess game voice control model
 DEEPCRAFT_PROJECT_NAME=Chess
 
 include ../common_app.mk
