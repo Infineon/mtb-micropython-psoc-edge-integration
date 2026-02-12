@@ -99,6 +99,20 @@
 /* Command timeout when using multiple commands */
 #define CMD_TIMEOUT_MULTI_CMD                   (20000U)
 
+/* IPC retry configuration */
+#define IPC_SEND_MAX_RETRIES                    (200U)
+#define IPC_SEND_RETRY_DELAY_US                 (1000U)  /* 1ms delay between retries */
+
+/* CM55 Debug Print Control - Uncomment to enable debug output */
+/* Suppress CM55 print to avoid UART collision - CM33 will also print */
+//#define CM55_DEBUG_ENABLE
+
+#ifdef CM55_DEBUG_ENABLE
+    #define CM55_DEBUG_PRINT(...) printf(__VA_ARGS__)
+#else
+    #define CM55_DEBUG_PRINT(...) do {} while(0)
+#endif
+
 /* Uncomment to print MCPS (Voice-Assistant only) */
 //#define SHOW_MCPS
 
@@ -122,7 +136,8 @@ static mtb_hal_lptimer_t lptimer_obj;
 
 /* IPC communication variables */
 static bool cm55_pipe2_msg_received = false;
-CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
+CY_SECTION_SHAREDMEM static ipc_msg_t cm55_send_msg_data;     /* Separate message for sending to CM33 */
+CY_SECTION_SHAREDMEM static char cm55_command_buffer[256] = {0};  /* Buffer for command string */
 static volatile uint32_t msg_val = RESET_VAL;
 static volatile bool voice_assistant_enabled = false;
 static TaskHandle_t voice_assistant_task_handle = NULL;
@@ -166,12 +181,12 @@ void cm55_msg_callback(uint32_t * msgData)
         uint8_t cmd = ipc_recv_msg->cmd;
         
         /* Debug: Print all received commands */
-        printf("[CM55] IPC callback received command: 0x%02X\r\n", cmd);
+        CM55_DEBUG_PRINT("[CM55] IPC callback received command: 0x%02X\r\n", cmd);
         
-        if (cmd == IPC_CMD_LED_SET_ON)
+        if (cmd == IPC_CMD_VA_START)
         {
-            /* Enable Voice Assistant */
-            printf("[CM55] Received LED_SET_ON command - Enabling Voice Assistant\r\n");
+            /* Start Voice Assistant */
+            CM55_DEBUG_PRINT("[CM55] Received VA_START command - Enabling Voice Assistant\r\n");
             voice_assistant_enabled = true;
             
             /* Resume the voice assistant task if it was suspended */
@@ -180,10 +195,10 @@ void cm55_msg_callback(uint32_t * msgData)
                 vTaskResume(voice_assistant_task_handle);
             }
         }
-        else if (cmd == IPC_CMD_LED_SET_OFF)
+        else if (cmd == IPC_CMD_VA_STOP)
         {
-            /* Disable Voice Assistant */
-            printf("[CM55] Received LED_SET_OFF command - Disabling Voice Assistant\r\n");
+            /* Stop Voice Assistant */
+            CM55_DEBUG_PRINT("[CM55] Received VA_STOP command - Disabling Voice Assistant\r\n");
             voice_assistant_enabled = false;
             
             /* Suspend the voice assistant task */
@@ -201,6 +216,122 @@ void cm55_msg_callback(uint32_t * msgData)
 
     cm55_pipe2_msg_received = true;
 }
+
+/*******************************************************************************
+* Function Name: send_command_to_cm33
+********************************************************************************
+* Summary:
+*  Sends detected command string to CM33 via IPC
+*
+* Parameters:
+*  command_text: The command string to send
+*
+* Return :
+*  void
+*
+*******************************************************************************/
+static void send_command_to_cm33(const char *command_text)
+{
+    if (command_text != NULL && command_text[0] != '\0')
+    {
+        /* Copy command to shared memory buffer */
+        strncpy(cm55_command_buffer, command_text, sizeof(cm55_command_buffer) - 1);
+        cm55_command_buffer[sizeof(cm55_command_buffer) - 1] = '\0';
+        
+        /* Prepare IPC message structure in shared memory */
+        /* First element MUST be client_id for IPC Pipe routing */
+        cm55_send_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;  /* Destination: CM33 */
+        cm55_send_msg_data.intr_mask = 0;  
+        cm55_send_msg_data.cmd = IPC_CMD_VA_COMMAND_DETECTED;
+        cm55_send_msg_data.value = (uint32_t)cm55_command_buffer;  /* Pointer to command buffer in shared memory */
+        
+        /* Small delay to ensure previous message is processed */
+        Cy_SysLib_DelayUs(2000U);
+        
+        /* Retry sending if pipe is busy */
+        cy_en_ipc_pipe_status_t pipe_status;
+        uint32_t retry_count = 0;
+        
+        while (retry_count < IPC_SEND_MAX_RETRIES)
+        {
+            /* Send using IPC Pipe API - from CM55 to CM33 */
+            pipe_status = Cy_IPC_Pipe_SendMessage(
+                CM33_IPC_PIPE_EP_ADDR,  /* To: CM33 endpoint */
+                CM55_IPC_PIPE_EP_ADDR,  /* From: CM55 endpoint */
+                (void *)&cm55_send_msg_data,
+                NULL  /* No release callback needed */
+            );
+            
+            if (pipe_status == CY_IPC_PIPE_SUCCESS)
+            {
+                /* Command sent successfully - CM33 will print */
+                return;
+            }
+            
+            /* If pipe is busy, wait and retry */
+            retry_count++;
+            Cy_SysLib_DelayUs(IPC_SEND_RETRY_DELAY_US);
+        }
+        
+        CM55_DEBUG_PRINT("[CM55] Failed to send command after %d retries, status: %d\r\n", 
+               IPC_SEND_MAX_RETRIES, pipe_status);
+    }
+}
+
+/*******************************************************************************
+* Function Name: send_wakeword_to_cm33
+********************************************************************************
+* Summary:
+*  Sends wake-word detection notification to CM33 via IPC
+*
+* Parameters:
+*  void
+*
+* Return :
+*  void
+*
+*******************************************************************************/
+static void send_wakeword_to_cm33(void)
+{
+    /* Prepare IPC message structure in shared memory */
+    /* First element MUST be client_id for IPC Pipe routing */
+    cm55_send_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;  /* Destination: CM33 */
+    cm55_send_msg_data.intr_mask = 0;  
+    cm55_send_msg_data.cmd = IPC_CMD_VA_WAKEWORD_DETECTED;
+    cm55_send_msg_data.value = RESET_VAL;
+    
+    /* Small delay to ensure previous message is processed */
+    Cy_SysLib_DelayUs(2000U);
+    
+    /* Retry sending if pipe is busy */
+    cy_en_ipc_pipe_status_t pipe_status;
+    uint32_t retry_count = 0;
+    
+    while (retry_count < IPC_SEND_MAX_RETRIES)
+    {
+        /* Send using IPC Pipe API - from CM55 to CM33 */
+        pipe_status = Cy_IPC_Pipe_SendMessage(
+            CM33_IPC_PIPE_EP_ADDR,  /* To: CM33 endpoint */
+            CM55_IPC_PIPE_EP_ADDR,  /* From: CM55 endpoint */
+            (void *)&cm55_send_msg_data,
+            NULL  /* No release callback needed */
+        );
+        
+        if (pipe_status == CY_IPC_PIPE_SUCCESS)
+        {
+            /* Wake-word sent successfully - CM33 will print */
+            return;
+        }
+        
+        /* If pipe is busy, wait and retry */
+        retry_count++;
+        Cy_SysLib_DelayUs(IPC_SEND_RETRY_DELAY_US);
+    }
+    
+    CM55_DEBUG_PRINT("[CM55] Failed to send command after %d retries, status: %d\r\n", 
+           IPC_SEND_MAX_RETRIES, pipe_status);
+}
+
 
 /*******************************************************************************
 * Function Name: lptimer_interrupt_handler
@@ -347,7 +478,7 @@ static void print_mcps(void)
     show_count++;
     if(show_count >= PRINT_MCPS_COUNT) 
     {
-        printf("Profiler: %u MCPS\r\n", cpu_cycle_sum/1000000);
+        CM55_DEBUG_PRINT("Profiler: %u MCPS\r\n", cpu_cycle_sum/1000000);
         show_count = 0;
         cpu_cycle_sum = 0;
     }
@@ -392,14 +523,14 @@ static void print_voice_assistant_status(cy_rslt_t result, va_event_t event, va_
             {
                 breathing_counter = LED_PWM_MIN_BRIGHTNESS;
             }
-            printf("Wake-word detected!\r\n");
+            CM55_DEBUG_PRINT("Wake-word detected!\r\n");
         }
         else if ( event == VA_EVENT_CMD_TIMEOUT )
         {
             if (RUNNING_MODE != VA_MODE_CMD_ONLY)
             {
                 breathing_counter = 0;
-                printf("Command Timeout!\r\n");
+                CM55_DEBUG_PRINT("Command Timeout!\r\n");
             }
         }
         else if ( event == VA_EVENT_CMD_SILENCE_TIMEOUT )
@@ -407,7 +538,7 @@ static void print_voice_assistant_status(cy_rslt_t result, va_event_t event, va_
             if ((RUNNING_MODE != VA_MODE_WW_MULTI_CMD) && (RUNNING_MODE != VA_MODE_CMD_ONLY))
             {
                 breathing_counter = 0;
-                printf("Pre Silence Timeout!\r\n");
+                CM55_DEBUG_PRINT("Pre Silence Timeout!\r\n");
             }
         }
         else if ( event == VA_EVENT_CMD_DETECTED )
@@ -416,10 +547,10 @@ static void print_voice_assistant_status(cy_rslt_t result, va_event_t event, va_
             {
                 breathing_counter = 0;
             }
-            printf("Command detected: ");
+            CM55_DEBUG_PRINT("Command detected: ");
             if (CY_RSLT_SUCCESS == voice_assistant_get_command(command_text))
             {
-                printf("%s\r\n\r\n", command_text);
+                CM55_DEBUG_PRINT("%s\r\n\r\n", command_text);
             }
 
             if (va_data == NULL)
@@ -427,37 +558,37 @@ static void print_voice_assistant_status(cy_rslt_t result, va_event_t event, va_
                 return;
             }
 
-            printf("Intent name: %s\r\n", MTB_NLU_INTENT_NAME_LIST(PROJECT_PREFIX)[va_data->intent_index] );
+            CM55_DEBUG_PRINT("Intent name: %s\r\n", MTB_NLU_INTENT_NAME_LIST(PROJECT_PREFIX)[va_data->intent_index] );
 
             if (va_data->num_var != 0)
             {
-                printf("Variable values: ");
+                CM55_DEBUG_PRINT("Variable values: ");
                 for (int i = 0; i < va_data->num_var; i++)
                 {
                     if (va_data->variable[i].unit_idx < 0)
                     {
-                        printf("%s ", MTB_NLU_VARIABLE_PHRASE_LIST(PROJECT_PREFIX)[va_data->variable[i].value]);
+                        CM55_DEBUG_PRINT("%s ", MTB_NLU_VARIABLE_PHRASE_LIST(PROJECT_PREFIX)[va_data->variable[i].value]);
                     }
                     else
                     {
-                        printf("%d ", va_data->variable[i].value);
+                        CM55_DEBUG_PRINT("%d ", va_data->variable[i].value);
                     }
                 }
-                printf("\n\rVariable units : ");
+                CM55_DEBUG_PRINT("\n\rVariable units : ");
                 for (int i = 0; i < va_data->num_var; i++)
                 {
                     if (va_data->variable[i].unit_idx < 0)
                     {
-                        printf("---");
+                        CM55_DEBUG_PRINT("---");
                     }
                     else
                     {
-                        printf("%s", MTB_NLU_UNIT_PHRASE_LIST(PROJECT_PREFIX)[va_data->variable[i].unit_idx]);
+                        CM55_DEBUG_PRINT("%s", MTB_NLU_UNIT_PHRASE_LIST(PROJECT_PREFIX)[va_data->variable[i].unit_idx]);
                     }
                 }
-                printf("\n\r");
+                CM55_DEBUG_PRINT("\n\r");
             }
-            printf("\n\r");
+            CM55_DEBUG_PRINT("\n\r");
         }
     }
 
@@ -500,6 +631,7 @@ static void run_voice_assistant_process(int16_t *audio_frame)
     va_rslt_t va_result;
     va_data_t va_data;
     va_event_t va_event;
+    char command_text[COMMAND_STRING_SIZE] = {0};
 
 #ifdef SHOW_MCPS
     profiler_start();
@@ -513,6 +645,24 @@ static void run_voice_assistant_process(int16_t *audio_frame)
 
     /* Print the status of the voice assistant */
     print_voice_assistant_status(va_result, va_event, &va_data);
+    
+    /* Handle IPC communication based on events */
+    if (va_result == VA_RSLT_SUCCESS)
+    {
+        if (va_event == VA_EVENT_WW_DETECTED)
+        {
+            /* Send wake-word notification to CM33 via IPC */
+            send_wakeword_to_cm33();
+        }
+        else if (va_event == VA_EVENT_CMD_DETECTED)
+        {
+            /* Get and send command to CM33 via IPC */
+            if (CY_RSLT_SUCCESS == voice_assistant_get_command(command_text))
+            {
+                send_command_to_cm33(command_text);
+            }
+        }
+    }
 }
 
 /*******************************************************************************
@@ -536,12 +686,12 @@ void voice_assistant_task(void * arg)
     ae_rslt_t ae_result;
 #endif /* USE_AUDIO_ENHANCEMENT */    
     
-    printf("[CM55] Voice Assistant task started, waiting for enable command...\r\n");
+    CM55_DEBUG_PRINT("[CM55] Voice Assistant task started, waiting for enable command...\r\n");
     
     /* Initially suspend the task until enabled by IPC command */
     vTaskSuspend(NULL);
     
-    printf("[CM55] Voice Assistant task resumed and initializing...\r\n");
+    CM55_DEBUG_PRINT("[CM55] Voice Assistant task resumed and initializing...\r\n");
     
     /* Initialize the PDM microphone */
     pdm_mic_init();
@@ -564,7 +714,7 @@ void voice_assistant_task(void * arg)
     }
     else
     {
-        printf("Voice Assistant initialized!\r\n\r\n");
+        CM55_DEBUG_PRINT("Voice Assistant initialized!\r\n\r\n");
     }
 
     /* Set the command timeout based on running mode */
@@ -603,29 +753,29 @@ void voice_assistant_task(void * arg)
     /* Print the instructions */
     if ((RUNNING_MODE == VA_MODE_WW_SINGLE_CMD) || (RUNNING_MODE == VA_MODE_WW_MULTI_CMD)) 
     {
-        printf("\n\rSay the wake-word \"%s\" followed by a command.\n\r\n\r", 
+        CM55_DEBUG_PRINT("\n\rSay the wake-word \"%s\" followed by a command.\n\r\n\r", 
                MTB_WWD_NLU_CONFIG_WAKE_WORD_STR(PROJECT_PREFIX)[0]);
     } 
     else if (RUNNING_MODE == VA_MODE_WW_ONLY)
     {
-        printf("\n\rSay the wake-word \"%s\".\n\r\n\r", 
+        CM55_DEBUG_PRINT("\n\rSay the wake-word \"%s\".\n\r\n\r", 
                MTB_WWD_NLU_CONFIG_WAKE_WORD_STR(PROJECT_PREFIX)[0]);
     } 
     else if (RUNNING_MODE == VA_MODE_CMD_ONLY)
     {
-        printf("\n\rSay a command.\n\r");
+        CM55_DEBUG_PRINT("\n\rSay a command.\n\r");
     }
 
     /* Print the behavior of the Blue LED */
-    printf("Note:\r\n");
-    printf("a. BLUE User LED will be solid ON --> indicating waiting for wake word \r\n");
+    CM55_DEBUG_PRINT("Note:\r\n");
+    CM55_DEBUG_PRINT("a. BLUE User LED will be solid ON --> indicating waiting for wake word \r\n");
     if (RUNNING_MODE != VA_MODE_WW_ONLY)
     {
-        printf("b. On successful wake word detection BLUE User LED will start breathing, indicating waiting for command\r\n");
-        printf("c. After successful command detection and execution BLUE User LED will be solid again indicating step (a) \r\n");
-        printf("d. In case of timeout or silence after wake word detection BLUE User LED will be solid again indicating step (a) \r\n");
+        CM55_DEBUG_PRINT("b. On successful wake word detection BLUE User LED will start breathing, indicating waiting for command\r\n");
+        CM55_DEBUG_PRINT("c. After successful command detection and execution BLUE User LED will be solid again indicating step (a) \r\n");
+        CM55_DEBUG_PRINT("d. In case of timeout or silence after wake word detection BLUE User LED will be solid again indicating step (a) \r\n");
     }
-    printf("\n\r");
+    CM55_DEBUG_PRINT("\n\r");
 
     for (;;)
     {
@@ -643,7 +793,7 @@ void voice_assistant_task(void * arg)
         /* Read the user button state */
         if (true == check_button_pressed())
         {
-            printf("Push to Talk Button detected! Say a command!\r\n\r\n");
+            CM55_DEBUG_PRINT("Push to Talk Button detected! Say a command!\r\n\r\n");
             voice_assistant_change_state(VA_RUN_CMD);
         }
         
@@ -702,14 +852,14 @@ int main(void)
     /* Initialize retarget-io middleware */
     init_retarget_io();
 
-    printf("\x1b[2J\x1b[;H");
+    CM55_DEBUG_PRINT("\x1b[2J\x1b[;H");
 
-    printf("******************************************** \r\n"
+    CM55_DEBUG_PRINT("******************************************** \r\n"
            "PSOC Edge MCU: Voice Assistant Demo          \r\n"
            "******************************************** \r\n\n");
 
     /* Setup IPC communication for CM55*/
-    printf("[CM55] Setting up IPC communication...\r\n");
+    CM55_DEBUG_PRINT("[CM55] Setting up IPC communication...\r\n");
     cm55_ipc_communication_setup();
 
     Cy_SysLib_Delay(CM55_APP_DELAY_MS);
@@ -724,18 +874,7 @@ int main(void)
         handle_error();
     }
 
-    /* Send initialization message to CM33 */
-    cm55_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
-    cm55_msg_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK_EP2;
-    cm55_msg_data.cmd = IPC_CMD_INIT;
-    cm55_msg_data.value = RESET_VAL;
-
-    pipeStatus = Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR, 
-                                         CM55_IPC_PIPE_EP_ADDR, 
-                                         (void *) &cm55_msg_data, RESET_VAL);
-    Cy_SysLib_Delay(CM55_APP_DELAY_MS);
-
-    printf("[CM55] IPC communication setup complete. Waiting for commands...\r\n");
+    CM55_DEBUG_PRINT("[CM55] IPC communication setup complete. Ready to receive commands...\r\n");
 
     setup_tickless_idle_timer();
 
@@ -751,7 +890,7 @@ int main(void)
     }
     else
     {
-        printf("Audio Enhancement initialized!\r\n");
+        CM55_DEBUG_PRINT("Audio Enhancement initialized!\r\n");
     }
 #endif /* USE_AUDIO_ENHANCEMENT */
 
@@ -767,8 +906,8 @@ int main(void)
         handle_error();
     }
 
-    printf("[CM55] Voice Assistant task created. Starting RTOS Scheduler...\r\n");
-    printf("[CM55] Send IPC_CMD_LED_SET_ON to enable Voice Assistant, IPC_CMD_LED_SET_OFF to disable.\r\n");
+    CM55_DEBUG_PRINT("[CM55] Voice Assistant task created. Starting RTOS Scheduler...\r\n");
+    CM55_DEBUG_PRINT("[CM55] Send IPC_CMD_VA_START to enable Voice Assistant, IPC_CMD_VA_STOP to disable.\r\n");
 
     /* Start the RTOS Scheduler - this will not return */
     vTaskStartScheduler();
