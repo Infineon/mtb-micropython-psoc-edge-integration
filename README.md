@@ -44,7 +44,7 @@ try:
         # Check for command detection
         if ipc.has_command():
             # Get the command
-            command = ipc.e()
+            command = ipc.get_last_command()
             
             if command:
                 print("\n[App] >>> Command received: {}".format(command))
