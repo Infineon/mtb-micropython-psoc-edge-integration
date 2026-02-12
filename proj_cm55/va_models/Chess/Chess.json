@@ -12,9 +12,9 @@
     "wakewords": [
         {
             "interjections": [
-                "OK"
+                "Hi"
             ],
-            "word": "chess",
+            "word": "Leo",
             "phoneme": []
         }
     ],
@@ -89,7 +89,8 @@
                 "D",
                 "E",
                 "F",
-                "G"
+                "G",
+                "H"
             ],
             "ranges": null,
             "units": null

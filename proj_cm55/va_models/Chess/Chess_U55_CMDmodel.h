@@ -11,6 +11,6 @@
 #define CHESS_U55_CMDMODEL_H
 
 extern const char Chess_CMDmodeldata[];
-#define CHESS_CMDMODELDATA_SIZE 29392
+#define CHESS_CMDMODELDATA_SIZE 34196
 
 #endif // CHESS_U55_CMDMODEL_H

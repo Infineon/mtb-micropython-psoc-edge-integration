@@ -11,6 +11,6 @@
 #define CHESS_U55_WWMODEL_H
 
 extern const char Chess_WWmodeldata[];
-#define CHESS_WWMODELDATA_SIZE 7376
+#define CHESS_WWMODELDATA_SIZE 7268
 
 #endif // CHESS_U55_WWMODEL_H
