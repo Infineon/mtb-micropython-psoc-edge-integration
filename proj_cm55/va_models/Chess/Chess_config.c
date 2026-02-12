@@ -126,7 +126,7 @@ static mtb_wwd_nlu_config_t ww_1_conf = {
 mtb_wwd_nlu_config_t *Chess_ww_nlu_configs[CHESS_NO_OF_WAKE_WORD] = {&ww_1_conf
 };
 
-char *Chess_ww_str[CHESS_NO_OF_WAKE_WORD] = {"OK chess"};
+char *Chess_ww_str[CHESS_NO_OF_WAKE_WORD] = {"Hi Leo"};
 
 const char* Chess_intent_name_list[CHESS_NUM_INTENTS] = {
     "moveByFigure",
@@ -140,7 +140,7 @@ const char* Chess_variable_name_list[CHESS_NUM_VARIABLES] = {
 
 const char* Chess_variable_phrase_list[CHESS_NUM_VARIABLE_PHRASES] = {
     "King", "Pawn", "Bishop", "Knight", "Rook", "Queen", // Figure
-    "A", "B", "C", "D", "E", "F", "G", // Letter
+    "A", "B", "C", "D", "E", "F", "G", "H", // Letter
     "", // Number
 };
 
@@ -165,6 +165,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 0, 1, 4, 2, -1, // (King) to (E) <numbers9> {}
     0, 3, 0, 0, 1, 5, 2, -1, // (King) to (F) <numbers9> {}
     0, 3, 0, 0, 1, 6, 2, -1, // (King) to (G) <numbers9> {}
+    0, 3, 0, 0, 1, 7, 2, -1, // (King) to (H) <numbers9> {}
     0, 3, 0, 1, 1, 0, 2, -1, // (Pawn) to (A) <numbers9> {}
     0, 3, 0, 1, 1, 1, 2, -1, // (Pawn) to (B) <numbers9> {}
     0, 3, 0, 1, 1, 2, 2, -1, // (Pawn) to (C) <numbers9> {}
@@ -172,6 +173,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 1, 1, 4, 2, -1, // (Pawn) to (E) <numbers9> {}
     0, 3, 0, 1, 1, 5, 2, -1, // (Pawn) to (F) <numbers9> {}
     0, 3, 0, 1, 1, 6, 2, -1, // (Pawn) to (G) <numbers9> {}
+    0, 3, 0, 1, 1, 7, 2, -1, // (Pawn) to (H) <numbers9> {}
     0, 3, 0, 2, 1, 0, 2, -1, // (Bishop) to (A) <numbers9> {}
     0, 3, 0, 2, 1, 1, 2, -1, // (Bishop) to (B) <numbers9> {}
     0, 3, 0, 2, 1, 2, 2, -1, // (Bishop) to (C) <numbers9> {}
@@ -179,6 +181,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 2, 1, 4, 2, -1, // (Bishop) to (E) <numbers9> {}
     0, 3, 0, 2, 1, 5, 2, -1, // (Bishop) to (F) <numbers9> {}
     0, 3, 0, 2, 1, 6, 2, -1, // (Bishop) to (G) <numbers9> {}
+    0, 3, 0, 2, 1, 7, 2, -1, // (Bishop) to (H) <numbers9> {}
     0, 3, 0, 3, 1, 0, 2, -1, // (Knight) to (A) <numbers9> {}
     0, 3, 0, 3, 1, 1, 2, -1, // (Knight) to (B) <numbers9> {}
     0, 3, 0, 3, 1, 2, 2, -1, // (Knight) to (C) <numbers9> {}
@@ -186,6 +189,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 3, 1, 4, 2, -1, // (Knight) to (E) <numbers9> {}
     0, 3, 0, 3, 1, 5, 2, -1, // (Knight) to (F) <numbers9> {}
     0, 3, 0, 3, 1, 6, 2, -1, // (Knight) to (G) <numbers9> {}
+    0, 3, 0, 3, 1, 7, 2, -1, // (Knight) to (H) <numbers9> {}
     0, 3, 0, 4, 1, 0, 2, -1, // (Rook) to (A) <numbers9> {}
     0, 3, 0, 4, 1, 1, 2, -1, // (Rook) to (B) <numbers9> {}
     0, 3, 0, 4, 1, 2, 2, -1, // (Rook) to (C) <numbers9> {}
@@ -193,6 +197,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 4, 1, 4, 2, -1, // (Rook) to (E) <numbers9> {}
     0, 3, 0, 4, 1, 5, 2, -1, // (Rook) to (F) <numbers9> {}
     0, 3, 0, 4, 1, 6, 2, -1, // (Rook) to (G) <numbers9> {}
+    0, 3, 0, 4, 1, 7, 2, -1, // (Rook) to (H) <numbers9> {}
     0, 3, 0, 5, 1, 0, 2, -1, // (Queen) to (A) <numbers9> {}
     0, 3, 0, 5, 1, 1, 2, -1, // (Queen) to (B) <numbers9> {}
     0, 3, 0, 5, 1, 2, 2, -1, // (Queen) to (C) <numbers9> {}
@@ -200,6 +205,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 5, 1, 4, 2, -1, // (Queen) to (E) <numbers9> {}
     0, 3, 0, 5, 1, 5, 2, -1, // (Queen) to (F) <numbers9> {}
     0, 3, 0, 5, 1, 6, 2, -1, // (Queen) to (G) <numbers9> {}
+    0, 3, 0, 5, 1, 7, 2, -1, // (Queen) to (H) <numbers9> {}
     0, 3, 0, 0, 1, 0, 2, -1, // move the (King) to (A) <numbers9> {}
     0, 3, 0, 0, 1, 1, 2, -1, // move the (King) to (B) <numbers9> {}
     0, 3, 0, 0, 1, 2, 2, -1, // move the (King) to (C) <numbers9> {}
@@ -207,6 +213,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 0, 1, 4, 2, -1, // move the (King) to (E) <numbers9> {}
     0, 3, 0, 0, 1, 5, 2, -1, // move the (King) to (F) <numbers9> {}
     0, 3, 0, 0, 1, 6, 2, -1, // move the (King) to (G) <numbers9> {}
+    0, 3, 0, 0, 1, 7, 2, -1, // move the (King) to (H) <numbers9> {}
     0, 3, 0, 1, 1, 0, 2, -1, // move the (Pawn) to (A) <numbers9> {}
     0, 3, 0, 1, 1, 1, 2, -1, // move the (Pawn) to (B) <numbers9> {}
     0, 3, 0, 1, 1, 2, 2, -1, // move the (Pawn) to (C) <numbers9> {}
@@ -214,6 +221,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 1, 1, 4, 2, -1, // move the (Pawn) to (E) <numbers9> {}
     0, 3, 0, 1, 1, 5, 2, -1, // move the (Pawn) to (F) <numbers9> {}
     0, 3, 0, 1, 1, 6, 2, -1, // move the (Pawn) to (G) <numbers9> {}
+    0, 3, 0, 1, 1, 7, 2, -1, // move the (Pawn) to (H) <numbers9> {}
     0, 3, 0, 2, 1, 0, 2, -1, // move the (Bishop) to (A) <numbers9> {}
     0, 3, 0, 2, 1, 1, 2, -1, // move the (Bishop) to (B) <numbers9> {}
     0, 3, 0, 2, 1, 2, 2, -1, // move the (Bishop) to (C) <numbers9> {}
@@ -221,6 +229,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 2, 1, 4, 2, -1, // move the (Bishop) to (E) <numbers9> {}
     0, 3, 0, 2, 1, 5, 2, -1, // move the (Bishop) to (F) <numbers9> {}
     0, 3, 0, 2, 1, 6, 2, -1, // move the (Bishop) to (G) <numbers9> {}
+    0, 3, 0, 2, 1, 7, 2, -1, // move the (Bishop) to (H) <numbers9> {}
     0, 3, 0, 3, 1, 0, 2, -1, // move the (Knight) to (A) <numbers9> {}
     0, 3, 0, 3, 1, 1, 2, -1, // move the (Knight) to (B) <numbers9> {}
     0, 3, 0, 3, 1, 2, 2, -1, // move the (Knight) to (C) <numbers9> {}
@@ -228,6 +237,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 3, 1, 4, 2, -1, // move the (Knight) to (E) <numbers9> {}
     0, 3, 0, 3, 1, 5, 2, -1, // move the (Knight) to (F) <numbers9> {}
     0, 3, 0, 3, 1, 6, 2, -1, // move the (Knight) to (G) <numbers9> {}
+    0, 3, 0, 3, 1, 7, 2, -1, // move the (Knight) to (H) <numbers9> {}
     0, 3, 0, 4, 1, 0, 2, -1, // move the (Rook) to (A) <numbers9> {}
     0, 3, 0, 4, 1, 1, 2, -1, // move the (Rook) to (B) <numbers9> {}
     0, 3, 0, 4, 1, 2, 2, -1, // move the (Rook) to (C) <numbers9> {}
@@ -235,6 +245,7 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 4, 1, 4, 2, -1, // move the (Rook) to (E) <numbers9> {}
     0, 3, 0, 4, 1, 5, 2, -1, // move the (Rook) to (F) <numbers9> {}
     0, 3, 0, 4, 1, 6, 2, -1, // move the (Rook) to (G) <numbers9> {}
+    0, 3, 0, 4, 1, 7, 2, -1, // move the (Rook) to (H) <numbers9> {}
     0, 3, 0, 5, 1, 0, 2, -1, // move the (Queen) to (A) <numbers9> {}
     0, 3, 0, 5, 1, 1, 2, -1, // move the (Queen) to (B) <numbers9> {}
     0, 3, 0, 5, 1, 2, 2, -1, // move the (Queen) to (C) <numbers9> {}
@@ -242,22 +253,35 @@ const int Chess_intent_map_array[CHESS_INTENT_MAP_ARRAY_TOTAL_SIZE] = {
     0, 3, 0, 5, 1, 4, 2, -1, // move the (Queen) to (E) <numbers9> {}
     0, 3, 0, 5, 1, 5, 2, -1, // move the (Queen) to (F) <numbers9> {}
     0, 3, 0, 5, 1, 6, 2, -1, // move the (Queen) to (G) <numbers9> {}
+    0, 3, 0, 5, 1, 7, 2, -1, // move the (Queen) to (H) <numbers9> {}
 };
 
 const int Chess_intent_map_array_sizes[CHESS_NUM_COMMANDS] = {
     8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
     8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
     8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
-    8, 8, 8, 8, 8, 8, 8, 8, 8, 
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 
 };
 
 const int Chess_variable_phrase_sizes[CHESS_NUM_VARIABLES] = {
     6, // Figure: (King,Pawn,Bishop,Knight,Rook,Queen)
-    7, // Letter: (A,B,C,D,E,F,G)
+    8, // Letter: (A,B,C,D,E,F,G,H)
     0, // Number: None
 };
 
 const int Chess_unit_phrase_map_array[CHESS_UNIT_PHRASE_MAP_ARRAY_TOTAL_SIZE] = {
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
+    1, 1, 13, // {}
     1, 1, 13, // {}
     1, 1, 13, // {}
     1, 1, 13, // {}
@@ -348,7 +372,7 @@ const int Chess_unit_phrase_map_array_sizes[CHESS_NUM_COMMANDS] = {
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
 };
 
 

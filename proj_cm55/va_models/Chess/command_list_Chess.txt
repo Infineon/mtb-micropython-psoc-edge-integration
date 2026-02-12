@@ -5,6 +5,7 @@ King to D <numbers9> {}
 King to E <numbers9> {}
 King to F <numbers9> {}
 King to G <numbers9> {}
+King to H <numbers9> {}
 Pawn to A <numbers9> {}
 Pawn to B <numbers9> {}
 Pawn to C <numbers9> {}
@@ -12,6 +13,7 @@ Pawn to D <numbers9> {}
 Pawn to E <numbers9> {}
 Pawn to F <numbers9> {}
 Pawn to G <numbers9> {}
+Pawn to H <numbers9> {}
 Bishop to A <numbers9> {}
 Bishop to B <numbers9> {}
 Bishop to C <numbers9> {}
@@ -19,6 +21,7 @@ Bishop to D <numbers9> {}
 Bishop to E <numbers9> {}
 Bishop to F <numbers9> {}
 Bishop to G <numbers9> {}
+Bishop to H <numbers9> {}
 Knight to A <numbers9> {}
 Knight to B <numbers9> {}
 Knight to C <numbers9> {}
@@ -26,6 +29,7 @@ Knight to D <numbers9> {}
 Knight to E <numbers9> {}
 Knight to F <numbers9> {}
 Knight to G <numbers9> {}
+Knight to H <numbers9> {}
 Rook to A <numbers9> {}
 Rook to B <numbers9> {}
 Rook to C <numbers9> {}
@@ -33,6 +37,7 @@ Rook to D <numbers9> {}
 Rook to E <numbers9> {}
 Rook to F <numbers9> {}
 Rook to G <numbers9> {}
+Rook to H <numbers9> {}
 Queen to A <numbers9> {}
 Queen to B <numbers9> {}
 Queen to C <numbers9> {}
@@ -40,6 +45,7 @@ Queen to D <numbers9> {}
 Queen to E <numbers9> {}
 Queen to F <numbers9> {}
 Queen to G <numbers9> {}
+Queen to H <numbers9> {}
 move the King to A <numbers9> {}
 move the King to B <numbers9> {}
 move the King to C <numbers9> {}
@@ -47,6 +53,7 @@ move the King to D <numbers9> {}
 move the King to E <numbers9> {}
 move the King to F <numbers9> {}
 move the King to G <numbers9> {}
+move the King to H <numbers9> {}
 move the Pawn to A <numbers9> {}
 move the Pawn to B <numbers9> {}
 move the Pawn to C <numbers9> {}
@@ -54,6 +61,7 @@ move the Pawn to D <numbers9> {}
 move the Pawn to E <numbers9> {}
 move the Pawn to F <numbers9> {}
 move the Pawn to G <numbers9> {}
+move the Pawn to H <numbers9> {}
 move the Bishop to A <numbers9> {}
 move the Bishop to B <numbers9> {}
 move the Bishop to C <numbers9> {}
@@ -61,6 +69,7 @@ move the Bishop to D <numbers9> {}
 move the Bishop to E <numbers9> {}
 move the Bishop to F <numbers9> {}
 move the Bishop to G <numbers9> {}
+move the Bishop to H <numbers9> {}
 move the Knight to A <numbers9> {}
 move the Knight to B <numbers9> {}
 move the Knight to C <numbers9> {}
@@ -68,6 +77,7 @@ move the Knight to D <numbers9> {}
 move the Knight to E <numbers9> {}
 move the Knight to F <numbers9> {}
 move the Knight to G <numbers9> {}
+move the Knight to H <numbers9> {}
 move the Rook to A <numbers9> {}
 move the Rook to B <numbers9> {}
 move the Rook to C <numbers9> {}
@@ -75,6 +85,7 @@ move the Rook to D <numbers9> {}
 move the Rook to E <numbers9> {}
 move the Rook to F <numbers9> {}
 move the Rook to G <numbers9> {}
+move the Rook to H <numbers9> {}
 move the Queen to A <numbers9> {}
 move the Queen to B <numbers9> {}
 move the Queen to C <numbers9> {}
@@ -82,3 +93,4 @@ move the Queen to D <numbers9> {}
 move the Queen to E <numbers9> {}
 move the Queen to F <numbers9> {}
 move the Queen to G <numbers9> {}
+move the Queen to H <numbers9> {}

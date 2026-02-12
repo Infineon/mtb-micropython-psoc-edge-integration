@@ -18,7 +18,8 @@
 #define  CHESS_VARIABLE_Letter_E               0xa
 #define  CHESS_VARIABLE_Letter_F               0xb
 #define  CHESS_VARIABLE_Letter_G               0xc
-#define  CHESS_VARIABLE_Number_                0xd
+#define  CHESS_VARIABLE_Letter_H               0xd
+#define  CHESS_VARIABLE_Number_                0xe
 
 #define  CHESS_UNIT_degree                0x0
 #define  CHESS_UNIT_degrees               0x1
