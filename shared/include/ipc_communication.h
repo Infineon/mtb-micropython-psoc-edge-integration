@@ -76,6 +76,12 @@
 /* Combined Interrupt Mask */
 #define CY_IPC_CYPIPE_INTR_MASK         ( CY_IPC_CYPIPE_CHAN_MASK_EP1 | CY_IPC_CYPIPE_CHAN_MASK_EP2)
 
+/* General IPC control commands */
+#define IPC_CMD_INIT                    (0x91)
+#define IPC_CMD_START                   (0x92)
+#define IPC_CMD_STOP                    (0x93)
+#define IPC_CMD_STATUS                  (0x94)
+
 /* Voice Assistant control commands (CM33->CM55) */
 #define IPC_CMD_VA_START                (0x95)
 #define IPC_CMD_VA_STOP                 (0x96)
