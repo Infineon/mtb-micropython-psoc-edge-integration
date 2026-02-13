@@ -15,6 +15,7 @@ libs/
 
 # ModusToolbox Configurator generated code and lock file
 GeneratedSource/
+!proj_cm55/afe/GeneratedSource/
 *.lock
 .mtbqueryapi
 
