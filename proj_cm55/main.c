@@ -508,12 +508,12 @@ static void print_voice_assistant_status(cy_rslt_t result, va_event_t event, va_
 
     if (result == VA_RSLT_LICENSE_ERROR)
     {
-        printf("ERROR! Voice Assistant license expired!\r\n");
+        CM55_DEBUG_PRINT("ERROR! Voice Assistant license expired!\r\n");
         handle_error();
     }
     else if ( result != VA_RSLT_SUCCESS )
     {
-        printf("Error! voice_assistant_process!! Error code=%d\r\n", result);
+        CM55_DEBUG_PRINT("Error! voice_assistant_process!! Error code=%d\r\n", result);
     }
     else
     {
@@ -709,7 +709,7 @@ void voice_assistant_task(void * arg)
 
     if (va_result != VA_RSLT_SUCCESS)
     {
-        printf("Error initializing the voice assistant. Error code=%d\r\n", va_result);
+        CM55_DEBUG_PRINT("Error initializing the voice assistant. Error code=%d\r\n", va_result);
         handle_error();
     }
     else
@@ -736,7 +736,7 @@ void voice_assistant_task(void * arg)
 
     if (va_result != VA_RSLT_SUCCESS)
     {
-        printf("Error setting timeout value. Error code=%d\r\n", va_result);
+        CM55_DEBUG_PRINT("Error setting timeout value. Error code=%d\r\n", va_result);
         handle_error();
     }
 
@@ -802,7 +802,7 @@ void voice_assistant_task(void * arg)
         ae_result = audio_enhancement_feed_input(audio_frame, NULL);
         if (ae_result == AE_RSLT_LICENSE_ERROR)
         {
-            printf("ERROR! Audio Enhancement license expired!\r\n");
+            CM55_DEBUG_PRINT("ERROR! Audio Enhancement license expired!\r\n");
             handle_error();
         }
 #else   
@@ -850,8 +850,10 @@ int main(void)
     __enable_irq();
 
     /* Initialize retarget-io middleware */
+    /* DISABLED: Conflicts with CM33 MicroPython REPL on shared UART */
+#ifdef CM55_DEBUG_ENABLE
     init_retarget_io();
-
+#endif /* CM55_DEBUG_ENABLE */
     CM55_DEBUG_PRINT("\x1b[2J\x1b[;H");
 
     CM55_DEBUG_PRINT("******************************************** \r\n"
@@ -870,7 +872,7 @@ int main(void)
 
     if(CY_IPC_PIPE_SUCCESS != pipeStatus)
     {
-        printf("[CM55] Error: Failed to register IPC callback\r\n");
+        CM55_DEBUG_PRINT("[CM55] Error: Failed to register IPC callback\r\n");
         handle_error();
     }
 
@@ -885,7 +887,7 @@ int main(void)
     ae_result = audio_enhancement_init(NUM_AUDIO_CHANNELS);
     if (ae_result != AE_RSLT_SUCCESS)
     {
-        printf("Error initializing the audio enhancement. Error code=%d\r\n", ae_result);
+        CM55_DEBUG_PRINT("Error initializing the audio enhancement. Error code=%d\r\n", ae_result);
         handle_error();
     }
     else
@@ -902,7 +904,7 @@ int main(void)
 
     if( pdPASS != result )
     {
-        printf("[CM55] Error: Failed to create voice assistant task\r\n");
+        CM55_DEBUG_PRINT("[CM55] Error: Failed to create voice assistant task\r\n");
         handle_error();
     }
 
