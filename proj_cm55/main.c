@@ -54,6 +54,14 @@
 *******************************************************************************/
 static bool cm55_pipe2_msg_received = false;
 
+typedef struct
+{
+    uint8_t     client_id;
+    uint16_t    intr_mask;
+    uint8_t     cmd;
+    uint32_t    value;
+} ipc_msg_t;
+
 CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
 
 static volatile uint32_t msg_val = RESET_VAL;
