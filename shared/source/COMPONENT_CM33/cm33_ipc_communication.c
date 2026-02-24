@@ -67,10 +67,10 @@ static uint32_t ipc_sema_array[CY_IPC_SEMA_COUNT / CY_IPC_SEMA_PER_WORD];
 *  void
 *
 *******************************************************************************/
-void cm33_ipc_pipe_isr(void)
+/*void cm33_ipc_pipe_isr(void)
 {
     Cy_IPC_Pipe_ExecuteCallback(CM33_IPC_PIPE_EP_ADDR);
-}
+}*/
 
 
 /*******************************************************************************

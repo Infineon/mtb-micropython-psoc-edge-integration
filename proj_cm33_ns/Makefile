@@ -65,11 +65,13 @@ CORE_NAME=CM33_0
 # tree for source code and builds it. The SOURCES variable can be used to
 # manually add source code to the build process from a location not searched
 # by default, or otherwise not found by the build system.
-SOURCES+=$(wildcard ../shared/source/COMPONENT_CM33/*.c)
+SOURCES+=
+#$(wildcard ../shared/source/COMPONENT_CM33/*.c)
 
 # Like SOURCES, but for include directories. Value should be paths to
 # directories (without a leading -I).
-INCLUDES+=../shared/include
+INCLUDES+=
+#../shared/include
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES+=CY_RETARGET_IO_CONVERT_LF_TO_CRLF
