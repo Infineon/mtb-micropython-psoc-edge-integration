@@ -92,13 +92,7 @@
 *******************************************************************************/
 /* IPC Message structure */
 /* Pointer to this structure will be shared through IPC Pipe */
-typedef struct
-{
-    uint8_t     client_id;
-    uint16_t    intr_mask;
-    uint8_t     cmd;
-    uint32_t    value;
-} ipc_msg_t;
+
 
 /*******************************************************************************
 * Function prototypes
