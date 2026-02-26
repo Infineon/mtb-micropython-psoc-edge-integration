@@ -91,6 +91,25 @@ mtb_program:
 	$(info Deploying firmware in board $(BOARD)...)
 	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(HEX_FILE) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA= 
 
+# Flash only CM33 secure core
+# Note: Uses proj_cm33_s as entry point since it has all dependencies
+mtb_program_cm33_s:
+	$(info )
+	$(info Deploying CM33 secure core only to board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(abspath $(MTB_LIBS_BUILD_PRJ_HEX_DIR)/proj_cm33_s_signed.hex) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s" $(MPY_MTB_MAKE_VARS) NINJA= 
+
+# Flash only CM33 non-secure core (MicroPython)
+mtb_program_cm33_ns:
+	$(info )
+	$(info Deploying CM33 non-secure core (MicroPython) only to board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(abspath $(MTB_LIBS_BUILD_PRJ_HEX_DIR)/proj_cm33_ns_shifted.hex) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s" $(MPY_MTB_MAKE_VARS) NINJA= 
+
+# Flash only CM55 (va model)
+mtb_program_cm55:
+	$(info )
+	$(info Deploying CM55 firmware only to board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(abspath $(MTB_LIBS_BUILD_PRJ_HEX_DIR)/proj_cm55.hex) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s" $(MPY_MTB_MAKE_VARS) NINJA= 
+
 mtb_clean:
 	$(info )
 	$(info Cleaning MTB build projects)
@@ -112,6 +131,11 @@ mtb_build_help:
 	$(info  mtb_build_ns_info       Retrieve build flags for cm33 non-secure build)
 	$(info 	mtb_build_m55           Build the cm55 project)
 	$(info 	mtb_program             Program the built firmware to the connected board.)
+	$(info 	mtb_program_cm33_s      Program only CM33 secure core (proj_cm33_s_signed.hex))
+	$(info 	mtb_program_cm33_ns     Program only CM33 non-secure core (proj_cm33_ns_shifted.hex))
+	$(info 	mtb_program_cm33        Program both CM33 cores (secure + non-secure))
+	$(info 	mtb_program_cm55        Program only CM55 core (proj_cm55.hex))
+	$(info 	mtb_program_all         Program all cores (CM33 + CM55))
 	$(info 	..                      Use DEV_SERIAL_NUMBER to specify the board serial number.)
 	$(info  mtb_clean               Clean the ModusToolbox build files)
 	$(info 	mtb_clean_m55           Clean the CM55 ModusToolbox build files)
@@ -122,4 +146,4 @@ ifdef EXT_HEX_FILE
 HEX_FILE = "../"$(EXT_HEX_FILE)
 endif
 
-.PHONY: mtb_build_ns mtb_build_s mtb_build_m55 mtb_build_ns_info mtb_program mtb_clean mtb_clean_m55 mtb_build_help
+.PHONY: mtb_build_ns mtb_build_s mtb_build_m55 mtb_build_ns_info mtb_program mtb_program_cm33_s mtb_program_cm33_ns mtb_program_cm33 mtb_program_cm55 mtb_program_all mtb_clean mtb_clean_m55 mtb_build_help
