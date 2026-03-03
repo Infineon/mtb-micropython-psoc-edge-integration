@@ -42,17 +42,13 @@
 #include "cybsp.h"
 #include "retarget_io_init.h"
 
+#define BLINKY_LED_DELAY_MSEC       (1000U)
+
 /*******************************************************************************
 * Function Name: main
 ********************************************************************************
 * Summary:
 * This is the main function of the CM33 non-secure application. 
-* This function...
-* 1. Initializes the device and board peripherals. 
-* 2. Enables  the CM55 CPU.
-* 3. Initializes IPC Pipe for CM33 CPU (Endpoint-1)
-* 4. Received IPC message commands from CM55 and
-*    returns a random number over the IPC pipe to CM55.
 *
 * Parameters:
 *  none

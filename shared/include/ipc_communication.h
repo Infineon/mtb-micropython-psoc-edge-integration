@@ -76,17 +76,6 @@
 /* Combined Interrupt Mask */
 #define CY_IPC_CYPIPE_INTR_MASK         ( CY_IPC_CYPIPE_CHAN_MASK_EP1 | CY_IPC_CYPIPE_CHAN_MASK_EP2)
 
-/* Command messages sent from CM55 to CM33 */
-#define IPC_CMD_INIT                    (0x81)
-#define IPC_CMD_START                   (0x82)
-#define IPC_CMD_STOP                    (0x83)
-#define IPC_CMD_STATUS                  (0x41)
-
-/* New LED control commands (CM33->CM55) #ToDo: This could ideally be moved out of this file later*/
-#define IPC_CMD_LED_INIT                (0x92)
-#define IPC_CMD_LED_SET_ON              (0x93)
-#define IPC_CMD_LED_SET_OFF             (0x94)
-
 /*******************************************************************************
 * Enumeration
 *******************************************************************************/
