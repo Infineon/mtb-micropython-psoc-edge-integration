@@ -1,7 +1,8 @@
 /*******************************************************************************
 * File Name        : main.c
 *
-* Description      : This source file contains the main routine for CM55 CPU
+* Description      : CM55 ping-pong IPC application.
+*                    Receives any command from CM33 and echoes it back unchanged.
 *
 * Related Document : See README.md
 *
@@ -17,7 +18,7 @@
 * agreement applies, then any use, reproduction, modification, translation, or
 * compilation of this Software is prohibited without the express written
 * permission of Infineon.
-* 
+*
 * Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
 * IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 * INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
@@ -44,16 +45,11 @@
 /*******************************************************************************
 * Macros
 *******************************************************************************/
-#define CM55_APP_DELAY_MS           (50U)
-#define RESET_VAL                   (0U)
-#define BTN_DEBOUNCE_DELAY          (200U)
-#define BTN_INT_PRIORITY            (7U)
+#define CM55_APP_DELAY_MS   (50U)
 
 /*******************************************************************************
-* Global Variable(s)
+* Typedefs
 *******************************************************************************/
-static bool cm55_pipe2_msg_received = false;
-
 typedef struct
 {
     uint8_t     client_id;
@@ -62,93 +58,94 @@ typedef struct
     uint32_t    value;
 } ipc_msg_t;
 
+/*******************************************************************************
+* Global Variables
+*******************************************************************************/
+/* Shared-memory buffer for the outgoing echo message */
 CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data;
+CY_SECTION_SHAREDMEM static ipc_msg_t cm55_msg_data2;
 
-static volatile uint32_t msg_val = RESET_VAL;
+/* Pending echo state — written in ISR callback, consumed in main loop */
+/* Service 1 (client_id=5) */
+static volatile bool     echo_pending = false;
+static volatile uint8_t  echo_cmd     = 0U;
+static volatile uint32_t echo_value   = 0UL;
 
-/* Flag to control LED heartbeat - can be disabled by IPC commands */
-static volatile bool led_heartbeat_enabled = true;
+/* Service 2 (client_id=6) */
+static volatile bool     echo2_pending = false;
+static volatile uint8_t  echo2_cmd     = 0U;
+static volatile uint32_t echo2_value   = 0UL;
 
 
 /*******************************************************************************
-* Function Name: cm33_msg_callback
+* Function Name: cm55_msg_callback
 ********************************************************************************
 * Summary:
-*  Callback function called when endpoint-2 (CM55) has received a message
+*  IPC callback executed on CM55 when a message arrives from CM33.
+*  Stores the received command/value so the main loop can echo them back.
 *
 * Parameters:
-*  msg_data: Message data received through IPC
+*  msgData - Pointer to the received IPC message (cast to ipc_msg_t *)
 *
-* Return :
+* Return:
 *  void
 *
 *******************************************************************************/
-void cm55_msg_callback(uint32_t * msgData)
+void cm55_msg_callback(uint32_t *msgData)
 {
-    ipc_msg_t *ipc_recv_msg;
-
-    if (msgData != NULL)
+    if (msgData == NULL)
     {
-        /* Cast the message received to the IPC structure */
-        ipc_recv_msg = (ipc_msg_t *) msgData;
-
-        /* Check the command type */
-        uint8_t cmd = ipc_recv_msg->cmd;
-        
-        /* Debug: Print all received commands */
-        printf("[CM55] IPC callback received command: 0x%02X\r\n", cmd);
-        
-        if (cmd == IPC_CMD_LED_INIT)
-        {
-            /* Initialize LED (already done at boot, but can re-init) */
-            printf("[CM55] Received LED_INIT command\r\n");
-            Cy_GPIO_Pin_Init(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, &CYBSP_USER_LED_config);
-            /* Re-enable heartbeat after reinit */
-            led_heartbeat_enabled = true;
-        }
-        else if (cmd == IPC_CMD_LED_SET_ON)
-        {
-            /* Set LED to constant ON state */
-            printf("[CM55] Received LED_SET_ON command - LED will stay ON\r\n");
-            /* Disable heartbeat so main loop doesn't override */
-            led_heartbeat_enabled = false;
-            /* Set LED ON */
-            Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, CYBSP_LED_STATE_ON);
-        }
-        else if (cmd == IPC_CMD_LED_SET_OFF)
-        {
-            /* Set LED to constant OFF state */
-            printf("[CM55] Received LED_SET_OFF command - LED will stay OFF\r\n");
-            /* Disable heartbeat so main loop doesn't override */
-            led_heartbeat_enabled = false;
-            /* Set LED OFF */
-            Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, CYBSP_LED_STATE_OFF);
-        }
-        else
-        {
-            /* Extract the command to be processed in the main loop */
-            msg_val = ipc_recv_msg->value;
-        }
+        return;
     }
 
-    cm55_pipe2_msg_received = true;
+    ipc_msg_t *rx = (ipc_msg_t *)msgData;
+
+    /* Buffer for echo in main loop (avoids IPC send from ISR context) */
+    echo_cmd     = rx->cmd;
+    echo_value   = rx->value;
+    echo_pending = true;
 }
 
+
+/*******************************************************************************
+* Function Name: cm55_svc2_callback
+********************************************************************************
+* Summary:
+*  IPC callback for Service 2 (registered at client_id=6).
+*  Stores the received command/value so the main loop can echo them back
+*  to CM33 Service 2 (client_id=4).
+*
+* Parameters:
+*  msgData - Pointer to the received IPC message (cast to ipc_msg_t *)
+*
+* Return:
+*  void
+*
+*******************************************************************************/
+void cm55_svc2_callback(uint32_t *msgData)
+{
+    if (msgData == NULL)
+    {
+        return;
+    }
+
+    ipc_msg_t *rx = (ipc_msg_t *)msgData;
+
+    echo2_cmd     = rx->cmd;
+    echo2_value   = rx->value;
+    echo2_pending = true;
+}
 
 
 /*******************************************************************************
 * Function Name: main
 ********************************************************************************
 * Summary:
-* This is the main function for CM55 application. 
-* 
-* This function...
-* 1. Initializes retarget-io middleware used for printing logs over UART.
-* 2. Initializes IPC Pipe for CM55 CPU (Endpoint-2)
-* 3. Sends IPC message commands to CM33 CPU to start/stop
-*    generating random numbers.
-* 4. Prints random number received from IPC pipe over UART terminal.
-* 
+*  CM55 entry point – ping-pong IPC application.
+*  1. Initialises peripherals.
+*  2. Sets up IPC Pipe (EP2) and registers cm55_msg_callback.
+*  3. Main loop: whenever a command arrives from CM33, echoes it straight back.
+*
 * Parameters:
 *  void
 *
@@ -160,10 +157,8 @@ int main(void)
 {
     cy_rslt_t result;
     cy_en_ipc_pipe_status_t pipeStatus;
-    cy_en_sysint_status_t int_status;
-    cy_en_syspm_status_t syspm_status;
 
-    /* Initialize the device and board peripherals */
+    /* Initialise BSP */
     result = cybsp_init();
 
     /* Board init failed. Stop program execution */
@@ -175,64 +170,80 @@ int main(void)
     /* Enable global interrupts */
     __enable_irq();
 
-    /* Initialize retarget-io middleware */
+    /* Initialise UART for debug output */
     init_retarget_io();
 
-        /* \x1b[2J\x1b[;H - ANSI ESC sequence for clear screen */
-    printf("\x1b[2J\x1b[;H");
-
-    printf("****************** "
-           "PSOC Edge MCU: IPC Pipes "
-           "****************** \r\n\n");
-
-    // ToDo: Code following will be moved to modipc.c. This is just a placeholder
-    // for now to show how IPC communication is set up.
-
-    /* Setup IPC communication for CM55*/
+    /* Set up IPC pipe for CM55 (Endpoint-2) */
     cm55_ipc_communication_setup();
 
     Cy_SysLib_Delay(CM55_APP_DELAY_MS);
 
-    /* Register a callback function to handle events on the CM55 IPC pipe */
-    pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR, &cm55_msg_callback,
-                                                      (uint32_t)CM55_IPC_PIPE_CLIENT_ID);
+    /* Register Service 1 callback at client_id=5 */
+    pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR,
+                                              &cm55_msg_callback,
+                                              (uint32_t)CM55_IPC_PIPE_CLIENT_ID);
 
-    if(CY_IPC_PIPE_SUCCESS != pipeStatus)
+    if (CY_IPC_PIPE_SUCCESS != pipeStatus)
     {
+        printf("[CM55] Error: Service1 callback registration failed (status=%d)\r\n", pipeStatus);
         handle_app_error();
     }
 
-    cm55_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
-    cm55_msg_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK_EP2;
-    cm55_msg_data.cmd = IPC_CMD_INIT;
-    cm55_msg_data.value = RESET_VAL;
+    /* Register Service 2 callback at client_id=6 */
+    pipeStatus = Cy_IPC_Pipe_RegisterCallback(CM55_IPC_PIPE_EP_ADDR,
+                                              &cm55_svc2_callback,
+                                              (uint32_t)(CM55_IPC_PIPE_CLIENT_ID + 1U));
 
-    pipeStatus = Cy_IPC_Pipe_SendMessage(CM33_IPC_PIPE_EP_ADDR, 
-                                         CM55_IPC_PIPE_EP_ADDR, 
-                                         (void *) &cm55_msg_data, RESET_VAL);
-    Cy_SysLib_Delay(CM55_APP_DELAY_MS);
-
-    /* Boot indication: Blink LED 5 times fast to show CM55 is alive */
-    printf("[CM55] CM55 Core started!\r\n");
-    for(int i = 0; i < 5; i++)
+    if (CY_IPC_PIPE_SUCCESS != pipeStatus)
     {
-        Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 0);  // LED ON
-        Cy_SysLib_Delay(100);
-        Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 1);  // LED OFF
-        Cy_SysLib_Delay(100);
+        printf("[CM55] Error: Service2 callback registration failed (status=%d)\r\n", pipeStatus);
+        handle_app_error();
     }
 
     for (;;)
     {
-        /* Heartbeat: Slow LED blink to show CM55 is running (only if enabled) */
-        if (led_heartbeat_enabled) {
-            Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 0);  // LED ON
-            Cy_SysLib_Delay(500);  // 500ms on
-            Cy_GPIO_Write(CYBSP_USER_LED_PORT, CYBSP_USER_LED_PIN, 1);  // LED OFF
-            Cy_SysLib_Delay(500);  // 500ms off
-        } else {
-            /* If heartbeat disabled, just delay to keep loop timing */
-            Cy_SysLib_Delay(50);
+        if (echo_pending)
+        {
+            echo_pending = false;
+
+            /* Echo Service 1: directed to CM33 Service1 (client_id=3) */
+            cm55_msg_data.client_id = CM33_IPC_PIPE_CLIENT_ID;
+            cm55_msg_data.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
+            cm55_msg_data.cmd       = echo_cmd;
+            cm55_msg_data.value     = (uint32_t)echo_value;
+
+            pipeStatus = Cy_IPC_Pipe_SendMessage(
+                CM33_IPC_PIPE_EP_ADDR,
+                CM55_IPC_PIPE_EP_ADDR,
+                (void *)&cm55_msg_data,
+                NULL);
+
+            if (CY_IPC_PIPE_SUCCESS != pipeStatus)
+            {
+                printf("[CM55] Service1 echo failed (status=%d)\r\n", pipeStatus);
+            }
+        }
+
+        if (echo2_pending)
+        {
+            echo2_pending = false;
+
+            /* Echo Service 2: directed to CM33 Service2 (client_id=4) */
+            cm55_msg_data2.client_id = CM33_IPC_PIPE_CLIENT_ID + 1U;
+            cm55_msg_data2.intr_mask = CY_IPC_CYPIPE_INTR_MASK;
+            cm55_msg_data2.cmd       = echo2_cmd;
+            cm55_msg_data2.value     = (uint32_t)echo2_value;
+
+            pipeStatus = Cy_IPC_Pipe_SendMessage(
+                CM33_IPC_PIPE_EP_ADDR,
+                CM55_IPC_PIPE_EP_ADDR,
+                (void *)&cm55_msg_data2,
+                NULL);
+
+            if (CY_IPC_PIPE_SUCCESS != pipeStatus)
+            {
+                printf("[CM55] Service2 echo failed (status=%d)\r\n", pipeStatus);
+            }
         }
 
         Cy_SysLib_Delay(CM55_APP_DELAY_MS);
