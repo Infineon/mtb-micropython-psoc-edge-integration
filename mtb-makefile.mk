@@ -14,6 +14,11 @@ MTB_LIBS_BUILD_PRJ_HEX_DIR := $(MTB_LIBS_BUILD_DIR)/project_hex
 MTB_PRJ_NS_DIR 			   := $(MTB_LIBS_DIR)/proj_cm33_ns		
 MTB_PRJ_NS_BUILD_DIR       := $(MTB_LIBS_DIR)/proj_cm33_ns/build/APP_$(BOARD)/$(CONFIG)
 
+# Per-core processed hex paths as absolute paths
+MTB_CM33_S_PROG_HEX  := $(abspath $(MTB_LIBS_DIR))/build/project_hex/proj_cm33_s_signed.hex
+MTB_CM33_NS_PROG_HEX := $(abspath $(MTB_LIBS_DIR))/build/project_hex/proj_cm33_ns_shifted.hex
+MTB_CM55_PROG_HEX    := $(abspath $(MTB_LIBS_DIR))/build/project_hex/proj_cm55.hex
+
 ################################################################################
 # Build of the non-secure application and retrieval of the building flags
 # to be used in the MicroPython build.
@@ -91,6 +96,21 @@ mtb_program:
 	$(info Deploying firmware in board $(BOARD)...)
 	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(HEX_FILE) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA= 
 
+mtb_deploy_cm33_ns:
+	$(info )
+	$(info Deploying CM33 non-secure (MicroPython) firmware in board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(MTB_CM33_NS_PROG_HEX) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_ns" $(MPY_MTB_MAKE_VARS) NINJA= COMBINE_SIGN_JSON=configs/boot_with_extended_boot.json
+
+mtb_deploy_cm33_s:
+	$(info )
+	$(info Deploying CM33 secure firmware in board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(MTB_CM33_S_PROG_HEX) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm33_s" $(MPY_MTB_MAKE_VARS) NINJA= COMBINE_SIGN_JSON=configs/boot_with_extended_boot.json
+
+mtb_deploy_cm55:
+	$(info )
+	$(info Deploying CM55 firmware in board $(BOARD)...)
+	$(Q) $(MAKE) -C $(MTB_LIBS_DIR) qprogram PROG_FILE=$(MTB_CM55_PROG_HEX) MTB_PROBE_SERIAL=$(DEV_SERIAL_NUMBER) MTB_PROJECTS="proj_cm55" $(MPY_MTB_MAKE_VARS) NINJA= COMBINE_SIGN_JSON=
+
 mtb_clean:
 	$(info )
 	$(info Cleaning MTB build projects)
@@ -107,11 +127,14 @@ mtb_build_help:
 	$(info )
 	$(info ModusToolbox build available targets:)
 	$(info )
-	$(info 	mtb_build_s             Build the cm33 secure project)
+	$(info 	mtb_build_s             Build the cm33 secure project (sign, relocate + merge CM33-S and CM33-NS into app_combined.hex).)
 	$(info 	mtb_build_ns            Build the cm33 non-secure project)
 	$(info  mtb_build_ns_info       Retrieve build flags for cm33 non-secure build)
 	$(info 	mtb_build_m55           Build the cm55 project)
-	$(info 	mtb_program             Program the built firmware to the connected board.)
+	$(info 	mtb_program             Program CM33 firmware (proj_cm33_s_signed.hex + proj_cm33_ns_shifted.hex) to the board.)
+	$(info 	mtb_deploy_cm33_ns      Program proj_cm33_ns_shifted.hex (CM33 non-secure / MicroPython) only.)
+	$(info 	mtb_deploy_cm33_s       Program proj_cm33_s_signed.hex (CM33 secure) only.)
+	$(info 	mtb_deploy_cm55         Program proj_cm55.hex (CM55) only.)
 	$(info 	..                      Use DEV_SERIAL_NUMBER to specify the board serial number.)
 	$(info  mtb_clean               Clean the ModusToolbox build files)
 	$(info 	mtb_clean_m55           Clean the CM55 ModusToolbox build files)
@@ -122,4 +145,4 @@ ifdef EXT_HEX_FILE
 HEX_FILE = "../"$(EXT_HEX_FILE)
 endif
 
-.PHONY: mtb_build_ns mtb_build_s mtb_build_m55 mtb_build_ns_info mtb_program mtb_clean mtb_clean_m55 mtb_build_help
+.PHONY: mtb_build_ns mtb_build_s mtb_build_m55 mtb_build_ns_info mtb_program mtb_deploy_cm33_ns mtb_deploy_cm33_s mtb_deploy_cm55 mtb_clean mtb_clean_m55 mtb_build_help

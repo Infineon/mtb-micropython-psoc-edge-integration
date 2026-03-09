@@ -87,10 +87,8 @@
                         },
                         {
                             "file" : "../build/project_hex/proj_cm33_ns_shifted.hex" 
-                        },
-                        {
-                            "file" : "../build/project_hex/proj_cm55.hex" 
                         }
+
                     ],
                     "outputs" :
                     [
